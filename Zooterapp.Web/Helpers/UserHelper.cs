@@ -39,10 +39,7 @@ namespace Zooterapp.Web.Helpers
             }
         }
 
-        public async Task<User> GetUserByEmailAsync(string email)
-        {
-            return user = await _userManager.FindByEmailAsync(email);
-        }
+        public async Task<User> GetUserByEmailAsync(string email) => user = await _userManager.FindByEmailAsync(email);
 
         public async Task<bool> IsUserInRoleAsync(User user, string roleName)
         {

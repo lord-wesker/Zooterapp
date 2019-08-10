@@ -10,10 +10,6 @@ namespace Zooterapp.Web.Data.Entities
 
         public string LastName { get; set; }
 
-        public string Phone { get; set; }
-
-        public string CellPhone { get; set; }
-
         public string Address { get; set; }
 
         public string FullName => $"{Name} {LastName}";

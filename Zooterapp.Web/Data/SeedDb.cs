@@ -2,26 +2,87 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Zooterapp.Web.Data.Entities;
+using Zooterapp.Web.Helpers;
 
 namespace Zooterapp.Web.Data
 {
     public class SeedDb
     {
         private readonly DataContext _context;
+        private readonly IUserHelper _userHelper;
 
-        public SeedDb(DataContext context)
+        public SeedDb(DataContext context, IUserHelper userHelper)
         {
             _context = context;
+            _userHelper = userHelper;
         }
 
         public async Task SeedAsync()
         {
             await _context.Database.EnsureCreatedAsync();
+            await CheckRoles();
+            var customer = await CheckUsersAsync("1020", "Andres", "Cahona", "acahona@correo.com", "300 783 9434", "381 32 32", "Calle Luna Calle Sol", "Customer");
+            var petOwner = await CheckUsersAsync("1020", "Andrea", "Cahona", "acahona2@correo.com", "300 783 9435", "381 32 32", "Calle Luna Calle Sol", "PetOwner");
             await CheckPetTypesAsync();
-            await CheckPetOwnersAsync();
-            await CheckUsersAsync();
+            await CheckPetOwnersAsync(petOwner);
+            await CheckCustomersAsync(customer);
             await CheckPetsAsync();
-            //await CheckAchievements();
+            await CheckCommitmentAsync();
+            await CheckAchievements();
+        }
+
+        private async Task CheckCommitmentAsync()
+        {
+            var petOwner = _context.PetOwners.FirstOrDefault();
+            var customer = _context.Customers.FirstOrDefault();
+            var pet = _context.Pets.FirstOrDefault();
+
+            if (!_context.Commitments.Any())
+            {
+                _context.Commitments.Add(new Commitment
+                {
+                    StartDate = DateTime.Today,
+                    EndDate = DateTime.Today.AddMonths(6),
+                    IsActive = true,
+                    Customer = customer,
+                    PetOwner = petOwner,
+                    Pet = pet,
+                    Price = 1000000M,
+                    Remarks = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris nec iaculis ex. Nullam gravida nunc eleifend",
+                });
+
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        private async Task<User> CheckUsersAsync(string document, string firstName, string lastName, string email, string cellphone, string phone, string address, string role)
+        {
+            var user = await _userHelper.GetUserByEmailAsync(email);
+            if (user == null)
+            {
+                user = new User
+                {
+                    Name = firstName,
+                    LastName = lastName,
+                    Email = email,
+                    UserName = email,
+                    CellPhone = cellphone,
+                    PhoneNumber = phone,
+                    Address = address,
+                    Document = document
+                };
+
+                await _userHelper.AddUserAsync(user, "123456");
+                await _userHelper.AddUserToRoleAsync(user, role);
+            }
+
+            return user;
+        }
+
+        private async Task CheckRoles()
+        {
+            await _userHelper.CheckRoleAsync("PetOwner");
+            await _userHelper.CheckRoleAsync("Customer");
         }
 
         private async Task CheckAchievements()
@@ -71,25 +132,27 @@ namespace Zooterapp.Web.Data
             }
         }
 
-        private async Task CheckPetOwnersAsync()
+        private async Task CheckPetOwnersAsync(User user)
         {
             if (!_context.PetOwners.Any())
             {
-                AddPetOwner("8989898", "Pedro", "Perez", "234 3232", "310 322 3221", "Calle Luna Calle Sol");
-                AddPetOwner("7655544", "Jose", "Cardona", "343 3226", "300 322 3221", "Calle 77 #22 21");
-                AddPetOwner("6565555", "Maria", "López", "450 4332", "350 322 3221", "Carrera 56 #22 21");
+                _context.PetOwners.Add(new PetOwner
+                {
+                    User = user,
+                });
 
                 await _context.SaveChangesAsync();
             }
         }
 
-        private async Task CheckUsersAsync()
+        private async Task CheckCustomersAsync(User user)
         {
-            if (!_context.Users.Any())
+            if (!_context.Customers.Any())
             {
-                AddUser("876543", "Ramon", "Gamboa", "234 3232", "310 322 3221", "Calle Luna Calle Sol");
-                AddUser("654565", "Julian", "Martinez", "343 3226", "300 322 3221", "Calle 77 #22 21");
-                AddUser("214231", "Carmenza", "Ruiz", "450 4332", "350 322 3221", "Carrera 56 #22 21");
+                _context.Customers.Add(new Customer
+                {
+                    User = user,
+                });
 
                 await _context.SaveChangesAsync();
             }
@@ -98,44 +161,6 @@ namespace Zooterapp.Web.Data
 
 
         // MOCKUP METHODS
-
-        private void AddPetOwner(
-            string document,
-            string name,
-            string lastName,
-            string phone,
-            string cellPhone,
-            string address)
-        {
-            _context.PetOwners.Add(new PetOwner
-            {
-                Document = document,
-                Name = name,
-                LastName = lastName,
-                Phone = phone,
-                CellPhone = cellPhone,
-                Address = address
-            });
-        }
-
-        private void AddUser(
-            string document,
-            string name,
-            string lastName,
-            string phone,
-            string cellPhone,
-            string address)
-        {
-            _context.Users.Add(new User
-            {
-                Document = document,
-                Name = name,
-                LastName = lastName,
-                Phone = phone,
-                CellPhone = cellPhone,
-                Address = address
-            });
-        }
 
         private void AddPet(
             int age,

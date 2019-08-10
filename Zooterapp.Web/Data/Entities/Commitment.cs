@@ -20,7 +20,7 @@ namespace Zooterapp.Web.Data.Entities
 
         public PetOwner PetOwner { get; set; }
 
-        public User User { get; set; }
+        public Customer Customer { get; set; }
 
         public DateTime StartDateLocal => StartDate.ToLocalTime();
 

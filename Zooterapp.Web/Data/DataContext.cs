@@ -1,9 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Zooterapp.Web.Data.Entities;
 
 namespace Zooterapp.Web.Data
 {
-    public class DataContext : DbContext
+    public class DataContext : IdentityDbContext<User>
     {
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
@@ -26,23 +27,23 @@ namespace Zooterapp.Web.Data
 
         public DbSet<PetType> PetTypes { get; set; }
 
-        public DbSet<User> Users { get; set; }
+        public DbSet<Customer> Customers { get; set; }
 
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<PetAchievement>()
-                .HasKey(pa => new { pa.PetId, pa.AchievementId });
+        //protected override void OnModelCreating(ModelBuilder modelBuilder)
+        //{
+        //    modelBuilder.Entity<PetAchievement>()
+        //        .HasKey(pa => new { pa.PetId, pa.AchievementId });
 
-            modelBuilder.Entity<PetAchievement>()
-                .HasOne(pa => pa.Pet)
-                .WithMany(p => p.PetAchievements)
-                .HasForeignKey(pa => pa.PetId);
+        //    modelBuilder.Entity<PetAchievement>()
+        //        .HasOne(pa => pa.Pet)
+        //        .WithMany(p => p.PetAchievements)
+        //        .HasForeignKey(pa => pa.PetId);
 
-            modelBuilder.Entity<PetAchievement>()
-                .HasOne(pa => pa.Achievement)
-                .WithMany(p => p.PetAchievements)
-                .HasForeignKey(pa => pa.AchievementId);
-        }
+        //    modelBuilder.Entity<PetAchievement>()
+        //        .HasOne(pa => pa.Achievement)
+        //        .WithMany(p => p.PetAchievements)
+        //        .HasForeignKey(pa => pa.AchievementId);
+        //}
     }
 }

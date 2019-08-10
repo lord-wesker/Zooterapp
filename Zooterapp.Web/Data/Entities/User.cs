@@ -1,11 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Identity;
 
 namespace Zooterapp.Web.Data.Entities
 {
-    public class User
+    public class User: IdentityUser
     {
-        public int Id { get; set; }
-
         public string Document { get; set; }
 
         public string Name { get; set; }
@@ -21,7 +19,5 @@ namespace Zooterapp.Web.Data.Entities
         public string FullName => $"{Name} {LastName}";
 
         public string FullNameWithDocument => $"{FullName} - {Document}";
-
-        public ICollection<Commitment> Commitments { get; set; }
     }
 }

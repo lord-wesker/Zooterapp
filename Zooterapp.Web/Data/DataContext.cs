@@ -28,6 +28,8 @@ namespace Zooterapp.Web.Data
         public DbSet<PetType> PetTypes { get; set; }
 
         public DbSet<Customer> Customers { get; set; }
+        
+        public DbSet<Manager> Managers{ get; set; }
 
 
         //protected override void OnModelCreating(ModelBuilder modelBuilder)

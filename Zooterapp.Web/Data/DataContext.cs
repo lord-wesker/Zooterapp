@@ -31,21 +31,5 @@ namespace Zooterapp.Web.Data
         
         public DbSet<Manager> Managers{ get; set; }
 
-
-        //protected override void OnModelCreating(ModelBuilder modelBuilder)
-        //{
-        //    modelBuilder.Entity<PetAchievement>()
-        //        .HasKey(pa => new { pa.PetId, pa.AchievementId });
-
-        //    modelBuilder.Entity<PetAchievement>()
-        //        .HasOne(pa => pa.Pet)
-        //        .WithMany(p => p.PetAchievements)
-        //        .HasForeignKey(pa => pa.PetId);
-
-        //    modelBuilder.Entity<PetAchievement>()
-        //        .HasOne(pa => pa.Achievement)
-        //        .WithMany(p => p.PetAchievements)
-        //        .HasForeignKey(pa => pa.AchievementId);
-        //}
     }
 }

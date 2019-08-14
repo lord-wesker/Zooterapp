@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Zooterapp.Web.Data.Entities;
+using Zooterapp.Web.Models;
 
 namespace Zooterapp.Web.Helpers
 {
@@ -15,5 +16,10 @@ namespace Zooterapp.Web.Helpers
         Task AddUserToRoleAsync(User user, string roleName);
 
         Task<bool> IsUserInRoleAsync(User user, string roleName);
+
+        Task<SignInResult> LoginAsync(LoginViewModel model);
+
+        Task LogoutAsync();
+
     }
 }

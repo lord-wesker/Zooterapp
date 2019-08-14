@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Configuration;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Zooterapp.Web.Data.Entities;
@@ -10,25 +11,42 @@ namespace Zooterapp.Web.Data
     {
         private readonly DataContext _context;
         private readonly IUserHelper _userHelper;
+        private readonly IConfiguration _configuration;
 
-        public SeedDb(DataContext context, IUserHelper userHelper)
+        public SeedDb(DataContext context, IUserHelper userHelper, IConfiguration configuration)
         {
             _context = context;
             _userHelper = userHelper;
+            _configuration = configuration;
         }
 
         public async Task SeedAsync()
         {
             await _context.Database.EnsureCreatedAsync();
             await CheckRoles();
-            var customer = await CheckUsersAsync("1020", "Andres", "Cahona", "acahona@correo.com", "300 783 9434", "381 32 32", "Calle Luna Calle Sol", "Customer");
-            var petOwner = await CheckUsersAsync("1020", "Andrea", "Cahona", "acahona2@correo.com", "300 783 9435", "381 32 32", "Calle Luna Calle Sol", "PetOwner");
+            var customer = await CheckUsersAsync("1020", "Andres", "Cahona", "acahona@correo.com", "300 783 9434", "Calle Luna Calle Sol", _configuration["Roles:Customer"]);
+            var petOwner = await CheckUsersAsync("2020", "Andrea", "Cahona", "acahona2@correo.com", "300 783 9435", "Calle Luna Calle Sol", _configuration["Roles:PetOwner"]);
+            var manager = await CheckUsersAsync("3030", "Yeison", "Calle", "yeison.calle@hotmail.com", "310 509 7121", "Carrera 110 # 36 - 60", _configuration["Roles:Manager"]);
             await CheckPetTypesAsync();
+            await CheckManagerAsync(manager);
             await CheckPetOwnersAsync(petOwner);
             await CheckCustomersAsync(customer);
             await CheckPetsAsync();
             await CheckCommitmentAsync();
             await CheckAchievements();
+        }
+
+        private async Task CheckManagerAsync(User user)
+        {
+            if (!_context.Managers.Any())
+            {
+                _context.Managers.Add(new Manager
+                {
+                    User = user,
+                });
+
+                await _context.SaveChangesAsync();
+            }
         }
 
         private async Task CheckCommitmentAsync()
@@ -55,7 +73,7 @@ namespace Zooterapp.Web.Data
             }
         }
 
-        private async Task<User> CheckUsersAsync(string document, string firstName, string lastName, string email, string cellphone, string phone, string address, string role)
+        private async Task<User> CheckUsersAsync(string document, string firstName, string lastName, string email, string cellphone, string address, string role)
         {
             var user = await _userHelper.GetUserByEmailAsync(email);
             if (user == null)
@@ -66,8 +84,7 @@ namespace Zooterapp.Web.Data
                     LastName = lastName,
                     Email = email,
                     UserName = email,
-                    CellPhone = cellphone,
-                    PhoneNumber = phone,
+                    PhoneNumber = cellphone,
                     Address = address,
                     Document = document
                 };
@@ -81,8 +98,9 @@ namespace Zooterapp.Web.Data
 
         private async Task CheckRoles()
         {
-            await _userHelper.CheckRoleAsync("PetOwner");
-            await _userHelper.CheckRoleAsync("Customer");
+            await _userHelper.CheckRoleAsync(_configuration["Roles:Manager"]);
+            await _userHelper.CheckRoleAsync(_configuration["Roles:PetOwner"]);
+            await _userHelper.CheckRoleAsync(_configuration["Roles:Customer"]);
         }
 
         private async Task CheckAchievements()
@@ -106,10 +124,10 @@ namespace Zooterapp.Web.Data
 
             if (!_context.Pets.Any())
             {
-                AddPet(3, "Levi", true, owner, type);
-                AddPet(4, "Yuki", true, owner, type);
-                AddPet(2, "Firulais", true, owner, type);
-                AddPet(5, "Kuro", true, owner, type);
+                AddPet(3, "Levi", true, owner, type, "Chancol");
+                AddPet(4, "Yuki", true, owner, type, "Angora");
+                AddPet(2, "Firulais", true, owner, type, "Doberman");
+                AddPet(5, "Kuro", true, owner, type, "Bombay");
 
                 await _context.SaveChangesAsync();
             }
@@ -119,14 +137,14 @@ namespace Zooterapp.Web.Data
         {
             if (!_context.PetTypes.Any())
             {
-                 _context.PetTypes.Add(new PetType { Name = "Canino" });
-                 _context.PetTypes.Add(new PetType { Name = "Felino" });
-                 _context.PetTypes.Add(new PetType { Name = "Equino" });
-                 _context.PetTypes.Add(new PetType { Name = "Ave" });
-                 _context.PetTypes.Add(new PetType { Name = "Bovino" });
-                 _context.PetTypes.Add(new PetType { Name = "Porcino" });
-                 _context.PetTypes.Add(new PetType { Name = "Ovino" });
-                 _context.PetTypes.Add(new PetType { Name = "Caprino" });
+                _context.PetTypes.Add(new PetType { Name = "Canino" });
+                _context.PetTypes.Add(new PetType { Name = "Felino" });
+                _context.PetTypes.Add(new PetType { Name = "Equino" });
+                _context.PetTypes.Add(new PetType { Name = "Ave" });
+                _context.PetTypes.Add(new PetType { Name = "Bovino" });
+                _context.PetTypes.Add(new PetType { Name = "Porcino" });
+                _context.PetTypes.Add(new PetType { Name = "Ovino" });
+                _context.PetTypes.Add(new PetType { Name = "Caprino" });
 
                 await _context.SaveChangesAsync();
             }
@@ -167,7 +185,8 @@ namespace Zooterapp.Web.Data
             string name,
             bool isAvailable,
             PetOwner owner,
-            PetType type)
+            PetType type,
+            string race)
         {
             _context.Pets.Add(new Pet
             {
@@ -175,7 +194,8 @@ namespace Zooterapp.Web.Data
                 Name = name,
                 IsAvailable = isAvailable,
                 Owner = owner,
-                Type = type
+                Type = type,
+                Race = race,
             });
         }
     }

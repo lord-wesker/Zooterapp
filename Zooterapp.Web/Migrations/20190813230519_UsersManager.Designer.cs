@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Zooterapp.Web.Data;
 
 namespace Zooterapp.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20190813230519_UsersManager")]
+    partial class UsersManager
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -219,8 +221,6 @@ namespace Zooterapp.Web.Migrations
 
                     b.Property<int?>("OwnerId");
 
-                    b.Property<string>("Race");
-
                     b.Property<int?>("TypeId");
 
                     b.HasKey("Id");
@@ -313,6 +313,8 @@ namespace Zooterapp.Web.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Name");
+
+                    b.Property<string>("race");
 
                     b.HasKey("Id");
 

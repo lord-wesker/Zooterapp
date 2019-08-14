@@ -12,6 +12,8 @@ namespace Zooterapp.Web.Data.Entities
 
         public PetType Type { get; set; }
 
+        public string Race { get; set; }
+
         public PetOwner Owner { get; set; }
 
         public bool IsAvailable { get; set; }

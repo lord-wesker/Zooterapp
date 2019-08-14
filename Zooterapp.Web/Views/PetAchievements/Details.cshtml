@@ -1,0 +1,30 @@
+﻿@model Zooterapp.Web.Data.Entities.PetAchievement
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>PetAchievement</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Pet)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Pet.Id)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Achievement)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Achievement.Id)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

@@ -442,7 +442,7 @@ namespace Zooterapp.Web.Migrations
                         .WithMany("Pets")
                         .HasForeignKey("OwnerId");
 
-                    b.HasOne("Zooterapp.Web.Data.Entities.PetType", "Type")
+                    b.HasOne("Zooterapp.Web.Data.Entities.PetType", "PetType")
                         .WithMany("Pets")
                         .HasForeignKey("TypeId");
                 });

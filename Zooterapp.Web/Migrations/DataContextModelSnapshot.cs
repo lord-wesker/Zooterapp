@@ -219,15 +219,15 @@ namespace Zooterapp.Web.Migrations
 
                     b.Property<int?>("OwnerId");
 
-                    b.Property<string>("Race");
+                    b.Property<int?>("PetTypeId");
 
-                    b.Property<int?>("TypeId");
+                    b.Property<string>("Race");
 
                     b.HasKey("Id");
 
                     b.HasIndex("OwnerId");
 
-                    b.HasIndex("TypeId");
+                    b.HasIndex("PetTypeId");
 
                     b.ToTable("Pets");
                 });
@@ -458,9 +458,9 @@ namespace Zooterapp.Web.Migrations
                         .WithMany("Pets")
                         .HasForeignKey("OwnerId");
 
-                    b.HasOne("Zooterapp.Web.Data.Entities.PetType", "Type")
+                    b.HasOne("Zooterapp.Web.Data.Entities.PetType", "PetType")
                         .WithMany("Pets")
-                        .HasForeignKey("TypeId");
+                        .HasForeignKey("PetTypeId");
                 });
 
             modelBuilder.Entity("Zooterapp.Web.Data.Entities.PetAchievement", b =>

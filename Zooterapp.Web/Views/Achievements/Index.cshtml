@@ -1,35 +1,78 @@
-﻿@model IEnumerable<Zooterapp.Web.Data.Entities.Achievement>
+﻿@model IEnumerable<Zooterapp.Web.Data.Entities.PetAchievement>
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h2>Index</h2>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />
+<br />
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
+div class="row">
+<div class="col-md-12">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Achievements</h3>
+        </div>
+        <div class="panel-body">
+            <table class="table table-hover table-responsive table-striped" id="MyTable">
+                <thead>
+                    <tr>
+                        <th>
+                            Pet Name
+                        </th>
+                        <th>
+                            Age
+                        </th>
+                        <th>
+                            Race
+                        </th>
+                        <th>
+                            Achievements
+                        </th>
+                        <th>
+                            Pet Owner
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Pet.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Pet.Age)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Pet.Race)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Achievement.PetAchievements.Count)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Pet.Owner)
+                        </td>
+                        <td>
+                            <a asp-action="Details" class="btn btn-default" asp-route-id="@item.Id"><i class="glyphicon glyphicon-list"> </i> </a>
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+
+    <script type="text/javascript">
+    	$(document).ready(function () {
+        	$('#MyTable').DataTable();
+    	});
+    </script>
 }
-    </tbody>
-</table>

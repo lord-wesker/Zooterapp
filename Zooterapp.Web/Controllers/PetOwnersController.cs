@@ -36,7 +36,7 @@ namespace Zooterapp.Web.Controllers
             var petOwner = await _context.PetOwners
                 .Include(po => po.User)
                 .Include(po => po.Pets)
-                .ThenInclude(p => p.Type)
+                .ThenInclude(p => p.PetType)
                 .Include(po => po.Pets)
                 .ThenInclude(p => p.PetImages)
                 .Include(po => po.Commitments)

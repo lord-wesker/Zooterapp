@@ -18,13 +18,14 @@ namespace Zooterapp.Web.Controllers
             _context = context;
         }
 
-        // GET: PetOwners
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            return View(await _context.PetOwners.ToListAsync());
+            return View(_context.PetOwners
+                .Include(po => po.User)
+                .Include(po => po.Pets)
+                .Include(po => po.Commitments));
         }
 
-        // GET: PetOwners/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,7 +34,14 @@ namespace Zooterapp.Web.Controllers
             }
 
             var petOwner = await _context.PetOwners
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .Include(po => po.User)
+                .Include(po => po.Pets)
+                .ThenInclude(p => p.Type)
+                .Include(po => po.Pets)
+                .ThenInclude(p => p.PetImages)
+                .Include(po => po.Commitments)
+                .FirstOrDefaultAsync(po => po.Id == id);
+
             if (petOwner == null)
             {
                 return NotFound();
@@ -42,15 +50,11 @@ namespace Zooterapp.Web.Controllers
             return View(petOwner);
         }
 
-        // GET: PetOwners/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: PetOwners/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id")] PetOwner petOwner)
@@ -64,7 +68,6 @@ namespace Zooterapp.Web.Controllers
             return View(petOwner);
         }
 
-        // GET: PetOwners/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -80,9 +83,6 @@ namespace Zooterapp.Web.Controllers
             return View(petOwner);
         }
 
-        // POST: PetOwners/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id")] PetOwner petOwner)

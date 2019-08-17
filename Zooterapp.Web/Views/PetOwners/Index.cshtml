@@ -4,7 +4,7 @@
     ViewData["Title"] = "Index";
 }
 
-<h2>Index</h2>
+<h2>Pet Owners</h2>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -12,12 +12,54 @@
 <table class="table">
     <thead>
         <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstOrDefault().User.Document)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstOrDefault().User.FullName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstOrDefault().User.Address)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstOrDefault().User.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstOrDefault().User.PhoneNumber)
+            </th>
+            <th>
+                Pets
+            </th>
+            <th>
+                Commitments
+            </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
         <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.User.Document)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.User.FullName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.User.Address)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.User.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.User.PhoneNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Pets.Count)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Commitments.Count)
+            </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a> |

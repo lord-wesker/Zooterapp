@@ -10,7 +10,7 @@ namespace Zooterapp.Web.Data.Entities
 
         public int Age { get; set; }
 
-        public PetType Type { get; set; }
+        public PetType PetType { get; set; }
 
         public string Race { get; set; }
 

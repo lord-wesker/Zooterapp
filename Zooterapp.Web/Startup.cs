@@ -44,7 +44,7 @@ namespace Zooterapp.Web
 
             services.AddDbContext<DataContext>(cfg =>
             {
-                cfg.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+                cfg.UseSqlServer(Configuration.GetConnectionString("BryanDefaultConnection"));
             });
 
             services.AddTransient<SeedDb>();

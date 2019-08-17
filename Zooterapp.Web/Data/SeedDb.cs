@@ -194,7 +194,7 @@ namespace Zooterapp.Web.Data
                 Name = name,
                 IsAvailable = isAvailable,
                 Owner = owner,
-                Type = type,
+                PetType = type,
                 Race = race,
             });
         }

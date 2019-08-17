@@ -7,10 +7,10 @@ namespace Zooterapp.Web.Models
 {
     public class PetViewModel: Pet
     {
-        public int PetId { get; set; }
+        public int PetOwnerId { get; set; }
 
+        [Display(Name = "Pet Type")]
         [Required(ErrorMessage = "The field {0} is mandatory.")]
-        [Display(Name = "Pet PetType")]
         [Range(1, int.MaxValue, ErrorMessage = "You must select a pet type.")]
         public int PetTypeID { get; set; }
 

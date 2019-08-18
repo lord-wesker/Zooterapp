@@ -32,17 +32,11 @@
                 <ul class="nav navbar-nav">
                     @if (User.Identity.IsAuthenticated && User.IsInRole("Manager"))
                     {
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">File<b class="caret"></b></a>
-                            <ul class="dropdown-menu">
-                                <li><a asp-area="" asp-controller="Managers" asp-action="Index">Managers</a></li>
-                                <li><a asp-area="" asp-controller="PetTypes" asp-action="Index">Pet Types</a></li>
-                            </ul>
-                        </li>
+                        <li><a asp-area="" asp-controller="Managers" asp-action="Index">Managers</a></li>
                         <li><a asp-area="" asp-controller="PetOwners" asp-action="Index">Pet Owners</a></li>
                         <li><a asp-area="" asp-controller="Customers" asp-action="Index">Customers</a></li>
                         <li><a asp-area="" asp-controller="Commitments" asp-action="Index">Commitments</a></li>
-                        <li><a asp-area="" asp-controller="Pets" asp-action="Index">Pets</a></li>
+                        <li><a asp-area="" asp-controller="PetTypes" asp-action="Index">Pet Types</a></li>
                     }
                 </ul>
                 <ul class="nav navbar-nav navbar-right">

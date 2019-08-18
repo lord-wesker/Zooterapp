@@ -28,6 +28,27 @@ body {
     margin: 15px;
 }
 
+.NonPetImages {
+    height: 221px;
+    min-height: 221px;
+    max-height: 221px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.PetImages {
+    height: 270px;
+    min-height: 270px;
+    max-height: 270px;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+.PetImages img {
+    max-height: 220px;
+}
+
 /* Hide/rearrange for smaller screens */
 @media screen and (max-width: 767px) {
     /* Hide captions */

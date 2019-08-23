@@ -11,7 +11,7 @@ namespace Zooterapp.Web.Controllers
     [Authorize(Roles = "Manager")]
     public class AchievementsController : Controller
     {
-        private readonly DataContext _context;
+        private readonly DataContext _context; 
 
         public AchievementsController(DataContext context)
         {

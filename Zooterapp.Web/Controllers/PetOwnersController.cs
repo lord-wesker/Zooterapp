@@ -122,6 +122,35 @@ namespace Zooterapp.Web.Controllers
             return newUser;
         }
 
+        public async Task<IActionResult> EditCommitment(int? id)
+        {
+            if (id == null) return NotFound();
+
+            var commitment = await _context.Commitments
+                .Include(c => c.PetOwner)
+                .Include(c => c.Customer)
+                .Include(c => c.Pet)
+                .FirstOrDefaultAsync(c => c.Id == id.Value);
+
+            if (commitment == null) return NotFound();
+
+            return View(ToCommitmentViewModel(commitment));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditCommitment(CommitmentViewModel model)
+        {
+            if(ModelState.IsValid)
+            {
+                var commitment = await ToCommitmentAsync(model, false);
+                _context.Commitments.Update(commitment);
+                await _context.SaveChangesAsync();
+                return RedirectToAction($"{nameof(DetailsPet)}/{model.PetOwnerId}");
+            }
+
+            return View(model);
+        }
+
         ///
 
         public async Task<IActionResult> AddPet(int? id)
@@ -358,6 +387,26 @@ namespace Zooterapp.Web.Controllers
                 Pet = await _context.Pets.FindAsync(view.PetId),
                 Remarks = view.Remarks,
                 StartDate = view.StartDate,
+            };
+        }
+
+        private CommitmentViewModel ToCommitmentViewModel(Commitment commitment)
+        {
+            return new CommitmentViewModel
+            {
+                Id = commitment.Id,
+                Customer = commitment.Customer,
+                CustomerId = commitment.Customer.Id,
+                Customers = GetComboCustomers(),
+                Pet = commitment.Pet,
+                PetId = commitment.Pet.Id,
+                PetOwner = commitment.PetOwner,
+                PetOwnerId = commitment.PetOwner.Id,
+                Price = commitment.Price,
+                Remarks = commitment.Remarks,
+                IsActive = commitment.IsActive,
+                StartDate = commitment.StartDate,
+                EndDate = commitment.EndDate
             };
         }
 

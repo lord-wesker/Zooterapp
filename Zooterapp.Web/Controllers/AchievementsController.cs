@@ -21,20 +21,11 @@ namespace Zooterapp.Web.Controllers
         // GET: Achievements
         public IActionResult Index()
         {
-            return View(_context.Achievements
-                .Include(a => a.PetAchievements)
-                .ThenInclude(pa => pa.Pet)
-                .ThenInclude(p => p.Name)
-                .Include(a => a.PetAchievements)
-                .ThenInclude(pa => pa.Pet)
-                .ThenInclude(p => p.Age)
-                .Include(a => a.PetAchievements)
-                .ThenInclude(pa => pa.Pet)
-                .ThenInclude(p => p.Race)
-                .Include(a => a.PetAchievements.Count)
-                .Include(a => a.PetAchievements)
-                .ThenInclude(pa => pa.Pet)
-                .ThenInclude(p => p.Owner));
+            return View(_context.PetAchievements
+                .Include(pa => pa.Achievement)
+                .Include(pa => pa.Pet)
+                    .ThenInclude(p => p.Owner)
+                );
         }
 
         public async Task<IActionResult> Details(int? id)
@@ -45,16 +36,6 @@ namespace Zooterapp.Web.Controllers
             }
 
             var achievement = await _context.Achievements
-                .Include(a => a.PetAchievements)
-                .ThenInclude(pa => pa.Pet)
-                .ThenInclude(p => p.Name)
-                .Include(a => a.PetAchievements)
-                .ThenInclude(pa => pa.Pet)
-                .ThenInclude(p => p.Age)
-                .Include(a => a.PetAchievements)
-                .ThenInclude(pa => pa.Pet)
-                .ThenInclude(p => p.Race)
-                .Include(a => a.PetAchievements.Count)
                 .Include(a => a.PetAchievements)
                 .ThenInclude(pa => pa.Pet)
                 .ThenInclude(p => p.Owner)

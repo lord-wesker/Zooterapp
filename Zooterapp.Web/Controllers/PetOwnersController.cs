@@ -99,6 +99,40 @@ namespace Zooterapp.Web.Controllers
             return View(model);
         }
 
+
+        public async Task<IActionResult> DeleteImage(int? id)
+        {
+            if (id == null) return NotFound();
+
+            var petImage = await _context.PetImages
+                .Include(pi => pi.Pet)
+                .FirstOrDefaultAsync(pi => pi.Id == id.Value);
+
+            if (petImage == null) return NotFound();
+
+            _context.PetImages.Remove(petImage);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction($"{nameof(DetailsPet)}/{petImage.Pet.Id}");
+        }
+
+        public async Task<IActionResult> DeleteCommitment(int? id)
+        {
+            if (id == null) return NotFound();
+
+            var commitment = await _context.Commitments
+                .Include(c => c.Pet)
+                .FirstOrDefaultAsync(c => c.Id == id);
+
+            if (commitment == null) return NotFound();
+
+            _context.Commitments.Remove(commitment);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction($"{nameof(DetailsPet)}/{commitment.Pet.Id}");
+        }
+
+
         private async Task<User> AddUserAsync(AddUserViewModel model)
         {
             var user = new User
@@ -150,6 +184,8 @@ namespace Zooterapp.Web.Controllers
 
             return View(model);
         }
+
+
 
         ///
 

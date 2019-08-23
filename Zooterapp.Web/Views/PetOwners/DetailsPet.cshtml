@@ -1,0 +1,188 @@
+﻿@model Zooterapp.Web.Data.Entities.Pet
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Pet</h2>
+<div class="row">
+    <div class="col-md-4">
+        <div>
+            <h4>Pet Owner</h4>
+            <hr />
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.Owner.User.Document)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Owner.User.Document)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Owner.User.Name)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Owner.User.Name)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Owner.User.LastName)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Owner.User.LastName)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Owner.User.Email)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Owner.User.Email)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Owner.User.PhoneNumber)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Owner.User.PhoneNumber)
+                </dd>
+            </dl>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div>
+            <h4>Pet Details</h4>
+            <hr />
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.Name)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Name)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Race)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Race)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Age)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Age)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.IsAvailable)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.IsAvailable)
+                </dd>
+                <dt>
+                    Contracts
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Commitments.Count)
+                </dd>
+            </dl>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div>
+            <h4>Images</h4>
+            @if (Model.PetImages.Count == 0)
+            {
+                <div class="alert alert-info PetImages">Not images added yet.</div>
+            }
+            else
+            {
+                <div class="row PetImages">
+                    @foreach (var item in Model.PetImages)
+                    {
+                        @if (!string.IsNullOrEmpty(item.ImageUrl))
+                        {
+                            <div class="col-md-12">
+                                <div class="thumbnail">
+                                    <img src="@Url.Content(item.ImageUrl)" alt="Image" class="img-responsive img-thumbnail" />
+                                    <div class="caption">
+                                        <a asp-action="DeleteImage" asp-route-id="@item.Id" class="btn btn-default">Delete</a>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<div>
+    <a asp-action="EditPet" asp-route-id="@Model.Id" class="btn btn-default">Edit</a>
+    <a asp-action="AddImage" asp-route-id="@Model.Id" class="btn btn-default">Add Image</a>
+    <a asp-action="AddCommitment" asp-route-id="@Model.Id" class="btn btn-default">Add Commitment</a>
+    <a asp-action="Details" asp-route-id="@Model.Owner.Id" class="btn btn-default">Back to Pet Owner</a>
+</div>
+<hr />
+<div class="row">
+    <div class="col-md-12">
+        <div>
+            <h4>Commitments</h4>
+            @if (Model.Commitments.Count == 0)
+            {
+                <div class="alert alert-info">Not commitments added yet.</div>
+            }
+            else
+            {
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>
+                                Customer
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Commitments.FirstOrDefault().Remarks)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Commitments.FirstOrDefault().Price)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Commitments.FirstOrDefault().StartDate)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Commitments.FirstOrDefault().EndDate)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Commitments.FirstOrDefault().IsActive)
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Commitments)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Customer.User.FullNameWithDocument)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Remarks)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Price)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.StartDateLocal)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.EndDateLocal)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.IsActive)
+                                </td>
+                                <td>
+                                    <a asp-action="EditCommitment" asp-route-id="@item.Id" class="btn btn-default">Edit</a>
+                                    <a asp-action="DetailsCommitment" asp-route-id="@item.Id" class="btn btn-default">Details</a>
+                                    <a asp-action="DeleteCommitment" asp-route-id="@item.Id" class="btn btn-default">Delete</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+    </div>
+</div>

@@ -1,0 +1,63 @@
+﻿@model Zooterapp.Web.Data.Entities.Commitment
+@{
+    ViewData["Title"] = "Commitment Details";
+}
+
+<div>
+    <h2>Commitment Details</h2>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            Pet Owner
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PetOwner.User.FullNameWithDocument)
+        </dd>
+        <dt>
+            Customer
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Customer.User.FullNameWithDocument)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Pet.PetType.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Pet.PetType.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Remarks)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Remarks)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Price)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Price)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.StartDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.StartDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.EndDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.EndDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.IsActive)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.IsActive)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="EditCommitment" asp-route-id="@Model.Id" class="btn btn-default">Edit</a>
+    <a asp-action="DetailsPet" asp-route-id="@Model.Pet.Id" class="btn btn-default">Back to Pet</a>
+</div>

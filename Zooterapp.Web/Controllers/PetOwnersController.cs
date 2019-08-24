@@ -99,6 +99,104 @@ namespace Zooterapp.Web.Controllers
             return View(model);
         }
 
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var petOwner = await _context.PetOwners
+                .Include(po => po.User)
+                .FirstOrDefaultAsync(po => po.Id == id);
+            if (petOwner == null)
+            {
+                return NotFound();
+            }
+
+            _context.PetOwners.Remove(petOwner);
+            await _context.SaveChangesAsync();
+            await _userHelper.DeleteUserAsync(petOwner.User.Email);
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> DeleteImage(int? id)
+        {
+            if (id == null) return NotFound();
+
+            var petImage = await _context.PetImages
+                .Include(pi => pi.Pet)
+                .FirstOrDefaultAsync(pi => pi.Id == id.Value);
+
+            if (petImage == null) return NotFound();
+
+            _context.PetImages.Remove(petImage);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction($"{nameof(DetailsPet)}/{petImage.Pet.Id}");
+        }
+
+        public async Task<IActionResult> DeleteCommitment(int? id)
+        {
+            if (id == null) return NotFound();
+
+            var commitment = await _context.Commitments
+                .Include(c => c.Pet)
+                .FirstOrDefaultAsync(c => c.Id == id);
+
+            if (commitment == null) return NotFound();
+
+            _context.Commitments.Remove(commitment);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction($"{nameof(DetailsPet)}/{commitment.Pet.Id}");
+        }
+
+        public async Task<IActionResult> DeletePet(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var pet = await _context.Pets
+                .Include(p => p.Owner)
+                .FirstOrDefaultAsync(pi => pi.Id == id.Value);
+            if (pet == null)
+            {
+                return NotFound();
+            }
+
+            _context.Pets.Remove(pet);
+            await _context.SaveChangesAsync();
+            return RedirectToAction($"{nameof(Details)}/{pet.Owner.Id}");
+        }
+
+        public async Task<IActionResult> DetailsCommitment(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var commitment = await _context.Commitments
+                .Include(c => c.PetOwner)
+                    .ThenInclude(o => o.User)
+                .Include(c => c.Customer)
+                    .ThenInclude(o => o.User)
+                .Include(c => c.Pet)
+                    .ThenInclude(p => p.PetType)
+                .FirstOrDefaultAsync(pi => pi.Id == id.Value);
+            if (commitment == null)
+            {
+                return NotFound();
+            }
+
+            return View(commitment);
+        }
+
+
         private async Task<User> AddUserAsync(AddUserViewModel model)
         {
             var user = new User
@@ -121,6 +219,90 @@ namespace Zooterapp.Web.Controllers
 
             return newUser;
         }
+
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var petOwner = await _context.PetOwners
+                .Include(o => o.User)
+                .FirstOrDefaultAsync(o => o.Id == id.Value);
+            if (petOwner == null)
+            {
+                return NotFound();
+            }
+
+            var view = new EditUserViewModel
+            {
+                Address = petOwner.User.Address,
+                Document = petOwner.User.Document,
+                FirstName = petOwner.User.Name,
+                Id = petOwner.Id,
+                LastName = petOwner.User.LastName,
+                PhoneNumber = petOwner.User.PhoneNumber
+            };
+
+            return View(view);
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(EditUserViewModel view)
+        {
+            if (ModelState.IsValid)
+            {
+                var petOwner = await _context.PetOwners
+                    .Include(o => o.User)
+                    .FirstOrDefaultAsync(o => o.Id == view.Id);
+
+                petOwner.User.Document = view.Document;
+                petOwner.User.Name = view.FirstName;
+                petOwner.User.LastName = view.LastName;
+                petOwner.User.Address = view.Address;
+                petOwner.User.PhoneNumber = view.PhoneNumber;
+
+                await _userHelper.UpdateUserAsync(petOwner.User);
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View(view);
+        }
+
+
+        public async Task<IActionResult> EditCommitment(int? id)
+        {
+            if (id == null) return NotFound();
+
+            var commitment = await _context.Commitments
+                .Include(c => c.PetOwner)
+                .Include(c => c.Customer)
+                .Include(c => c.Pet)
+                .FirstOrDefaultAsync(c => c.Id == id.Value);
+
+            if (commitment == null) return NotFound();
+
+            return View(ToCommitmentViewModel(commitment));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditCommitment(CommitmentViewModel model)
+        {
+            if(ModelState.IsValid)
+            {
+                var commitment = await ToCommitmentAsync(model, false);
+                _context.Commitments.Update(commitment);
+                await _context.SaveChangesAsync();
+                return RedirectToAction($"{nameof(DetailsPet)}/{model.PetOwnerId}");
+            }
+
+            return View(model);
+        }
+
+
 
         ///
 
@@ -361,7 +543,25 @@ namespace Zooterapp.Web.Controllers
             };
         }
 
-        //Combos
+        private CommitmentViewModel ToCommitmentViewModel(Commitment commitment)
+        {
+            return new CommitmentViewModel
+            {
+                Id = commitment.Id,
+                Customer = commitment.Customer,
+                CustomerId = commitment.Customer.Id,
+                Customers = GetComboCustomers(),
+                Pet = commitment.Pet,
+                PetId = commitment.Pet.Id,
+                PetOwner = commitment.PetOwner,
+                PetOwnerId = commitment.PetOwner.Id,
+                Price = commitment.Price,
+                Remarks = commitment.Remarks,
+                IsActive = commitment.IsActive,
+                StartDate = commitment.StartDate,
+                EndDate = commitment.EndDate
+            };
+        }
 
         private IEnumerable<SelectListItem> GetComboPets()
         {

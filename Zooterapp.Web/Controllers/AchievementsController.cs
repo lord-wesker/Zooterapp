@@ -1,12 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Zooterapp.Web.Data;
 using Zooterapp.Web.Data.Entities;
@@ -18,11 +12,17 @@ namespace Zooterapp.Web.Controllers
     [Authorize(Roles = "Manager")]
     public class AchievementsController : Controller
     {
-        private readonly DataContext _context; 
+        private readonly DataContext _context;
+        private readonly ICombosHelper _combosHelper;
+        private readonly IConverterHelper _converterHelper;
 
-        public AchievementsController(DataContext context)
+        public AchievementsController(DataContext context, 
+            ICombosHelper combosHelper,
+            IConverterHelper converterHelper)
         {
             _context = context;
+            _combosHelper = combosHelper;
+            _converterHelper = converterHelper;
         }
 
         // GET: Achievements
@@ -65,7 +65,7 @@ namespace Zooterapp.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Achievement model)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 _context.Achievements.Add(model);
                 await _context.SaveChangesAsync();
@@ -86,25 +86,25 @@ namespace Zooterapp.Web.Controllers
                 .Include(p => p.Achievement)
                 .Include(p => p.Pet)
                 .FirstOrDefaultAsync(p => p.Id == id);
-            
+
 
             if (petachievement == null)
             {
                 return NotFound();
             }
 
-            var view = ToPetAchievement(petachievement);
+            var view = _converterHelper.ToPetAchievement(petachievement);
             return View(view);
 
         }
 
-       
+
         [HttpPost]
         public async Task<IActionResult> EditAchievements(PetAchievementViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var petachievement = await ToPetAchievementAsync(model, false);
+                var petachievement = await _converterHelper.ToPetAchievementAsync(model, false);
                 _context.PetAchievements.Update(petachievement);
                 await _context.SaveChangesAsync();
                 return RedirectToAction($"{nameof(Details)}/{model.PetOwnerId}");
@@ -112,43 +112,5 @@ namespace Zooterapp.Web.Controllers
 
             return View(model);
         }
-        private PetAchievementViewModel ToPetAchievement(PetAchievement petachievement)
-        {
-            return new PetAchievementViewModel
-            {
-                Id = petachievement.Id,
-                PetAchievements = GetComboPetsAchievements(),
-                PetAchievementID = petachievement.AchievementId,
-                Pet = petachievement.Pet,
-                PetId = petachievement.PetId,
-            };
-        }
-        private async Task<PetAchievement> ToPetAchievementAsync(PetAchievementViewModel model, bool isNew)
-        {
-            return new PetAchievement
-            {
-                Id = isNew ? 0 : model.Id,
-                Achievement = await _context.Achievements.FindAsync(model.AchievementId),
-                Pet = await _context.Pets.FindAsync(model.PetId),
-            };
-        }
-
-        private IEnumerable<SelectListItem> GetComboPetsAchievements()
-        {
-            var list = _context.PetAchievements.Select(pa => new SelectListItem
-            {
-                Text = pa.Achievement.Name,
-                Value = pa.Id.ToString()
-            }).OrderBy(pt => pt.Text).ToList();
-
-            list.Insert(0, new SelectListItem
-            {
-                Text = "(Select a Pet Achievement ...)",
-                Value = "0",
-            });
-
-            return list;
-        }
-
     }
 }

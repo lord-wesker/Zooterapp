@@ -1,10 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Zooterapp.Common.Models
 {
-    class EmailRequest
+    public class EmailRequest
     {
+        [Required]
+        [EmailAddress]
+        public string Email { get; set; }
+
     }
 }

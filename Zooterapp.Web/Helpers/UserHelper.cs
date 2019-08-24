@@ -21,7 +21,7 @@ namespace Zooterapp.Web.Helpers
             _signInManager = signInManager;
         }
 
-        public async Task<IdentityResult> AddUserAsync(User user, string password) => 
+        public async Task<IdentityResult> AddUserAsync(User user, string password) =>
             await _userManager.CreateAsync(user, password);
 
         public async Task AddUserToRoleAsync(User user, string roleName)
@@ -52,10 +52,10 @@ namespace Zooterapp.Web.Helpers
             return response.Succeeded;
         }
 
-        public async Task<User> GetUserByEmailAsync(string email) => 
+        public async Task<User> GetUserByEmailAsync(string email) =>
             await _userManager.FindByEmailAsync(email);
 
-        public async Task<bool> IsUserInRoleAsync(User user, string roleName) => 
+        public async Task<bool> IsUserInRoleAsync(User user, string roleName) =>
             await _userManager.IsInRoleAsync(user, roleName);
 
         public async Task<SignInResult> LoginAsync(LoginViewModel model)
@@ -75,6 +75,11 @@ namespace Zooterapp.Web.Helpers
         public async Task<IdentityResult> UpdateUserAsync(User user)
         {
             return await _userManager.UpdateAsync(user);
+        }
+
+        public async Task<SignInResult> ValidatePasswordAsync(User user, string password)
+        {
+            return await _signInManager.CheckPasswordSignInAsync(user, password, false);
         }
     }
 }

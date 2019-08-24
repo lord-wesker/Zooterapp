@@ -12,13 +12,10 @@ namespace Zooterapp.Web.Controllers
     public class AchievementsController : Controller
     {
         private readonly DataContext _context;
-        private readonly IConverterHelper _converterHelper;
 
-        public AchievementsController(DataContext context,
-            IConverterHelper converterHelper)
+        public AchievementsController(DataContext context)
         {
             _context = context;
-            _converterHelper = converterHelper;
         }
 
         // GET: Achievements

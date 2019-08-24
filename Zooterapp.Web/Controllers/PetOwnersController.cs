@@ -1,12 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Zooterapp.Web.Data;
 using Zooterapp.Web.Data.Entities;
@@ -22,16 +20,19 @@ namespace Zooterapp.Web.Controllers
         private readonly IUserHelper _userHelper;
         private readonly IImageHelper _imageHelper;
         private readonly IConfiguration _configuration;
+        private readonly ICombosHelper _combosHelper;
 
         public PetOwnersController(DataContext context,
             IUserHelper userHelper,
             IImageHelper imageHelper,
-            IConfiguration configuration)
+            IConfiguration configuration,
+            ICombosHelper combosHelper)
         {
             _context = context;
             _userHelper = userHelper;
             _imageHelper = imageHelper;
             _configuration = configuration;
+            _combosHelper = combosHelper;
         }
 
         public IActionResult Index()
@@ -291,7 +292,7 @@ namespace Zooterapp.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> EditCommitment(CommitmentViewModel model)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 var commitment = await ToCommitmentAsync(model, false);
                 _context.Commitments.Update(commitment);
@@ -317,7 +318,7 @@ namespace Zooterapp.Web.Controllers
             var view = new PetViewModel
             {
                 PetOwnerId = petOwner.Id,
-                PetTypes = GetComboPets(),
+                PetTypes = _combosHelper.GetComboPetType(),
             };
 
             return View(view);
@@ -421,7 +422,7 @@ namespace Zooterapp.Web.Controllers
             {
                 PetOwnerId = pet.Owner.Id,
                 PetId = pet.Id,
-                Customers = GetComboCustomers(),
+                Customers = _combosHelper.GetComboCustomers(),
                 Price = 0,
                 StartDate = DateTime.Today,
                 EndDate = DateTime.Today.AddYears(1)
@@ -504,7 +505,7 @@ namespace Zooterapp.Web.Controllers
                 Race = pet.Race,
                 Age = pet.Age,
                 PetOwnerId = pet.Owner.Id,
-                PetTypes = GetComboPets(),
+                PetTypes = _combosHelper.GetComboPetType(),
                 PetTypeID = pet.PetType.Id,
                 IsAvailable = pet.IsAvailable,
             };
@@ -550,7 +551,7 @@ namespace Zooterapp.Web.Controllers
                 Id = commitment.Id,
                 Customer = commitment.Customer,
                 CustomerId = commitment.Customer.Id,
-                Customers = GetComboCustomers(),
+                Customers = _combosHelper.GetComboCustomers(),
                 Pet = commitment.Pet,
                 PetId = commitment.Pet.Id,
                 PetOwner = commitment.PetOwner,
@@ -563,39 +564,5 @@ namespace Zooterapp.Web.Controllers
             };
         }
 
-        private IEnumerable<SelectListItem> GetComboPets()
-        {
-            var list = _context.PetTypes.Select(pt => new SelectListItem
-            {
-                Text = pt.Name,
-                Value = pt.Id.ToString()
-            }).OrderBy(pt => pt.Text).ToList();
-
-            list.Insert(0, new SelectListItem
-            {
-                Text = "(Select a Pet Type ...)",
-                Value = "0",
-            });
-
-            return list;
-        }
-
-        private IEnumerable<SelectListItem> GetComboCustomers()
-        {
-            var list = _context.Customers.Include(c => c.User).Select(p => new SelectListItem
-            {
-                Text = p.User.FullNameWithDocument,
-                Value = p.Id.ToString()
-            }).OrderBy(p => p.Text).ToList();
-
-            list.Insert(0, new SelectListItem
-            {
-                Text = "(Select a customer...)",
-                Value = "0"
-            });
-
-            return list;
-
-        }
     }
 }

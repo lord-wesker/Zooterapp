@@ -50,6 +50,7 @@ namespace Zooterapp.Web
             services.AddTransient<SeedDb>();
             services.AddScoped<IUserHelper, UserHelper>();
             services.AddScoped<IImageHelper, ImageHelper>();
+            services.AddScoped<ICombosHelper, CombosHelper>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }

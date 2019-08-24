@@ -361,6 +361,8 @@ namespace Zooterapp.Web.Controllers
             };
         }
 
+        //Combos
+
         private IEnumerable<SelectListItem> GetComboPets()
         {
             var list = _context.PetTypes.Select(pt => new SelectListItem

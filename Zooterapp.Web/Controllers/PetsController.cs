@@ -53,7 +53,7 @@ namespace Zooterapp.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Age,Race,IsAvailable")] Pet pet)
+        public async Task<IActionResult> Create(Pet pet)
         {
             if (ModelState.IsValid)
             {

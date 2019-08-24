@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Zooterapp.Web.Data;
 using Zooterapp.Web.Data.Entities;
 using Zooterapp.Web.Helpers;
-using Zooterapp.Web.Models;
 
 namespace Zooterapp.Web.Controllers
 {
@@ -13,47 +12,19 @@ namespace Zooterapp.Web.Controllers
     public class AchievementsController : Controller
     {
         private readonly DataContext _context;
-        private readonly ICombosHelper _combosHelper;
         private readonly IConverterHelper _converterHelper;
 
-        public AchievementsController(DataContext context, 
-            ICombosHelper combosHelper,
+        public AchievementsController(DataContext context,
             IConverterHelper converterHelper)
         {
             _context = context;
-            _combosHelper = combosHelper;
             _converterHelper = converterHelper;
         }
 
         // GET: Achievements
         public async Task<IActionResult> Index()
         {
-            //return View(await _context.PetAchievements
-            //    .Include(pa => pa.Achievement)
-            //    .Include(pa => pa.Pet)
-            //        .ThenInclude(p => p.Owner).ToListAsync()
-            //    );
             return View(await _context.Achievements.ToListAsync());
-        }
-
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var achievement = await _context.Achievements
-                .Include(a => a.PetAchievements)
-                .ThenInclude(pa => pa.Pet)
-                .ThenInclude(p => p.Owner)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (achievement == null)
-            {
-                return NotFound();
-            }
-
-            return View(achievement);
         }
 
         public IActionResult Create()
@@ -62,7 +33,6 @@ namespace Zooterapp.Web.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Achievement model)
         {
             if (ModelState.IsValid)
@@ -74,7 +44,7 @@ namespace Zooterapp.Web.Controllers
             return View(model);
         }
 
-        public async Task<IActionResult> EditAchievements(int? id)
+        public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
             {
@@ -82,35 +52,50 @@ namespace Zooterapp.Web.Controllers
             }
 
 
-            var petachievement = await _context.PetAchievements
-                .Include(p => p.Achievement)
-                .Include(p => p.Pet)
-                .FirstOrDefaultAsync(p => p.Id == id);
+            var achievement = await _context.Achievements.FindAsync(id);
 
 
-            if (petachievement == null)
+            if (achievement == null)
             {
                 return NotFound();
             }
 
-            var view = _converterHelper.ToPetAchievement(petachievement);
-            return View(view);
+            return View(achievement);
 
         }
 
-
         [HttpPost]
-        public async Task<IActionResult> EditAchievements(PetAchievementViewModel model)
+        public async Task<IActionResult> Edit(Achievement model)
         {
             if (ModelState.IsValid)
             {
-                var petachievement = await _converterHelper.ToPetAchievementAsync(model, false);
-                _context.PetAchievements.Update(petachievement);
+                _context.Achievements.Update(model);
                 await _context.SaveChangesAsync();
-                return RedirectToAction($"{nameof(Details)}/{model.PetOwnerId}");
+                return RedirectToAction(nameof(Index));
             }
 
             return View(model);
         }
+
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var achievement = await _context.Achievements.FindAsync(id);
+
+            if (achievement == null)
+            {
+                return NotFound();
+            }
+
+            _context.Achievements.Remove(achievement);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
+        }
+
     }
 }

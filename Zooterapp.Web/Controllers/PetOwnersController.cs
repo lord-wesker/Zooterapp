@@ -99,6 +99,28 @@ namespace Zooterapp.Web.Controllers
             return View(model);
         }
 
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var petOwner = await _context.PetOwners
+                .Include(po => po.User)
+                .FirstOrDefaultAsync(po => po.Id == id);
+            if (petOwner == null)
+            {
+                return NotFound();
+            }
+
+            _context.PetOwners.Remove(petOwner);
+            await _context.SaveChangesAsync();
+            await _userHelper.DeleteUserAsync(petOwner.User.Email);
+
+            return RedirectToAction(nameof(Index));
+        }
+
 
         public async Task<IActionResult> DeleteImage(int? id)
         {

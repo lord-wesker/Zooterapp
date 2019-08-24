@@ -14,11 +14,15 @@ namespace Zooterapp.Web.Controllers
     {
         private readonly DataContext _context;
         private readonly ICombosHelper _combosHelper;
+        private readonly IConverterHelper _converterHelper;
 
-        public AchievementsController(DataContext context, ICombosHelper combosHelper)
+        public AchievementsController(DataContext context, 
+            ICombosHelper combosHelper,
+            IConverterHelper converterHelper)
         {
             _context = context;
             _combosHelper = combosHelper;
+            _converterHelper = converterHelper;
         }
 
         // GET: Achievements
@@ -89,7 +93,7 @@ namespace Zooterapp.Web.Controllers
                 return NotFound();
             }
 
-            var view = ToPetAchievement(petachievement);
+            var view = _converterHelper.ToPetAchievement(petachievement);
             return View(view);
 
         }
@@ -100,33 +104,13 @@ namespace Zooterapp.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var petachievement = await ToPetAchievementAsync(model, false);
+                var petachievement = await _converterHelper.ToPetAchievementAsync(model, false);
                 _context.PetAchievements.Update(petachievement);
                 await _context.SaveChangesAsync();
                 return RedirectToAction($"{nameof(Details)}/{model.PetOwnerId}");
             }
 
             return View(model);
-        }
-        private PetAchievementViewModel ToPetAchievement(PetAchievement petachievement)
-        {
-            return new PetAchievementViewModel
-            {
-                Id = petachievement.Id,
-                PetAchievements = _combosHelper.GetComboPetsAchievements(),
-                PetAchievementID = petachievement.AchievementId,
-                Pet = petachievement.Pet,
-                PetId = petachievement.PetId,
-            };
-        }
-        private async Task<PetAchievement> ToPetAchievementAsync(PetAchievementViewModel model, bool isNew)
-        {
-            return new PetAchievement
-            {
-                Id = isNew ? 0 : model.Id,
-                Achievement = await _context.Achievements.FindAsync(model.AchievementId),
-                Pet = await _context.Pets.FindAsync(model.PetId),
-            };
         }
     }
 }

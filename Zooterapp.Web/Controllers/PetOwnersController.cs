@@ -21,18 +21,21 @@ namespace Zooterapp.Web.Controllers
         private readonly IImageHelper _imageHelper;
         private readonly IConfiguration _configuration;
         private readonly ICombosHelper _combosHelper;
+        private readonly IConverterHelper _converterHelper;
 
         public PetOwnersController(DataContext context,
             IUserHelper userHelper,
             IImageHelper imageHelper,
             IConfiguration configuration,
-            ICombosHelper combosHelper)
+            ICombosHelper combosHelper,
+            IConverterHelper converterHelper)
         {
             _context = context;
             _userHelper = userHelper;
             _imageHelper = imageHelper;
             _configuration = configuration;
             _combosHelper = combosHelper;
+            _converterHelper = converterHelper;
         }
 
         public IActionResult Index()
@@ -286,7 +289,7 @@ namespace Zooterapp.Web.Controllers
 
             if (commitment == null) return NotFound();
 
-            return View(ToCommitmentViewModel(commitment));
+            return View(_converterHelper.ToCommitmentViewModel(commitment));
         }
 
         [HttpPost]
@@ -294,7 +297,7 @@ namespace Zooterapp.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var commitment = await ToCommitmentAsync(model, false);
+                var commitment = await _converterHelper.ToCommitmentAsync(model, false);
                 _context.Commitments.Update(commitment);
                 await _context.SaveChangesAsync();
                 return RedirectToAction($"{nameof(DetailsPet)}/{model.PetOwnerId}");
@@ -329,12 +332,12 @@ namespace Zooterapp.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var pet = await ToPetAsync(model, true);
+                var pet = await _converterHelper.ToPetAsync(model, true);
                 _context.Pets.Add(pet);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-
+            model.PetTypes = _combosHelper.GetComboPetType();
             return View(model);
         }
 
@@ -357,7 +360,7 @@ namespace Zooterapp.Web.Controllers
                 return NotFound();
             }
 
-            var view = ToPetViewModel(pet);
+            var view = _converterHelper.ToPetViewModel(pet);
             return View(view);
 
         }
@@ -367,7 +370,7 @@ namespace Zooterapp.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var pet = await ToPetAsync(model, false);
+                var pet = await _converterHelper.ToPetAsync(model, false);
                 _context.Pets.Update(pet);
                 await _context.SaveChangesAsync();
                 return RedirectToAction($"{nameof(Details)}/{model.PetOwnerId}");
@@ -436,12 +439,12 @@ namespace Zooterapp.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var commitment = await ToCommitmentAsync(model, true);
+                var commitment = await _converterHelper.ToCommitmentAsync(model, true);
                 _context.Commitments.Add(commitment);
                 await _context.SaveChangesAsync();
                 return RedirectToAction($"{nameof(DetailsPet)}/{model.PetId}");
             }
-
+            model.Customers = _combosHelper.GetComboCustomers();
             return View(model);
         }
 
@@ -491,77 +494,6 @@ namespace Zooterapp.Web.Controllers
             }
 
             return View(model);
-        }
-
-
-        /// HELPERS & CONVERTERS
-
-        private PetViewModel ToPetViewModel(Pet pet)
-        {
-            return new PetViewModel
-            {
-                Id = pet.Id,
-                Name = pet.Name,
-                Race = pet.Race,
-                Age = pet.Age,
-                PetOwnerId = pet.Owner.Id,
-                PetTypes = _combosHelper.GetComboPetType(),
-                PetTypeID = pet.PetType.Id,
-                IsAvailable = pet.IsAvailable,
-            };
-        }
-
-        private async Task<Pet> ToPetAsync(PetViewModel model, bool isNew)
-        {
-            return new Pet
-            {
-                Id = isNew ? 0 : model.Id,
-                Name = model.Name,
-                Age = model.Age,
-                Race = model.Race,
-                PetType = await _context.PetTypes.FindAsync(model.PetTypeID),
-                Owner = await _context.PetOwners.FindAsync(model.PetOwnerId),
-                IsAvailable = model.IsAvailable,
-                Commitments = isNew ? new List<Commitment>() : model.Commitments,
-                PetImages = isNew ? new List<PetImage>() : model.PetImages,
-                PetAchievements = isNew ? new List<PetAchievement>() : model.PetAchievements,
-            };
-        }
-
-        private async Task<Commitment> ToCommitmentAsync(CommitmentViewModel view, bool isNew)
-        {
-            return new Commitment
-            {
-                Id = isNew ? 0 : view.Id,
-                EndDate = view.EndDate,
-                IsActive = view.IsActive,
-                Customer = await _context.Customers.FindAsync(view.CustomerId),
-                PetOwner = await _context.PetOwners.FindAsync(view.PetOwnerId),
-                Price = view.Price,
-                Pet = await _context.Pets.FindAsync(view.PetId),
-                Remarks = view.Remarks,
-                StartDate = view.StartDate,
-            };
-        }
-
-        private CommitmentViewModel ToCommitmentViewModel(Commitment commitment)
-        {
-            return new CommitmentViewModel
-            {
-                Id = commitment.Id,
-                Customer = commitment.Customer,
-                CustomerId = commitment.Customer.Id,
-                Customers = _combosHelper.GetComboCustomers(),
-                Pet = commitment.Pet,
-                PetId = commitment.Pet.Id,
-                PetOwner = commitment.PetOwner,
-                PetOwnerId = commitment.PetOwner.Id,
-                Price = commitment.Price,
-                Remarks = commitment.Remarks,
-                IsActive = commitment.IsActive,
-                StartDate = commitment.StartDate,
-                EndDate = commitment.EndDate
-            };
         }
 
     }

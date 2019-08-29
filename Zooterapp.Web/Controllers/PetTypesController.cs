@@ -24,24 +24,6 @@ namespace Zooterapp.Web.Controllers
             return View(await _context.PetTypes.ToListAsync());
         }
 
-        // GET: PetTypes/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var petType = await _context.PetTypes
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (petType == null)
-            {
-                return NotFound();
-            }
-
-            return View(petType);
-        }
-
         // GET: PetTypes/Create
         public IActionResult Create()
         {

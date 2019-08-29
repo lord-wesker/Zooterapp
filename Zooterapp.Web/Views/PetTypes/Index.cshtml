@@ -1,10 +1,10 @@
 ﻿@model IEnumerable<Zooterapp.Web.Data.Entities.PetType>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Pet Types";
 }
 
-<h2>Index</h2>
+    <h2>Pet Types</h2>
 
 <p>
     <a class="btn btn-default" asp-action="Create">Create New</a>
@@ -25,8 +25,7 @@
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
-                <a asp-action="Edit" class="btn btn-default" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" class="btn btn-default" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Edit" class="btn btn-default" asp-route-id="@item.Id">Edit</a> | 
                 <a asp-action="Delete" class="btn btn-default" asp-route-id="@item.Id">Delete</a>
             </td>
         </tr>

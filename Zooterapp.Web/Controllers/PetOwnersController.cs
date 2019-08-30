@@ -56,10 +56,12 @@ namespace Zooterapp.Web.Controllers
             var petOwner = await _context.PetOwners
                 .Include(po => po.User)
                 .Include(po => po.Pets)
-                .ThenInclude(p => p.PetType)
+                    .ThenInclude(p => p.PetType)
                 .Include(po => po.Pets)
-                .ThenInclude(p => p.PetImages)
+                    .ThenInclude(p => p.PetImages)
                 .Include(po => po.Commitments)
+                .Include(po => po.Pets)
+                    .ThenInclude(p => p.PetAchievements)
                 .FirstOrDefaultAsync(po => po.Id == id);
 
             if (petOwner == null)
@@ -342,6 +344,7 @@ namespace Zooterapp.Web.Controllers
         }
 
 
+
         public async Task<IActionResult> EditPet(int? id)
         {
             if (id == null)
@@ -395,6 +398,8 @@ namespace Zooterapp.Web.Controllers
                     .ThenInclude(c => c.User)
                 .Include(o => o.PetType)
                 .Include(p => p.PetImages)
+                .Include(p => p.PetAchievements)
+                    .ThenInclude(pa => pa.Achievement)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (pet == null)
             {
@@ -404,6 +409,43 @@ namespace Zooterapp.Web.Controllers
             return View(pet);
         }
 
+        public async Task<IActionResult> AddAchievement(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var pet = await _context.Pets.FirstOrDefaultAsync(p => p.Id == id);
+
+            if (pet == null)
+            {
+                return NotFound();
+            }
+
+            var view = new AchievementViewModel
+            {
+                PetId = pet.Id,
+                Pet = pet,
+                Achievements = _combosHelper.GetComboAchievements(),
+            };
+
+            return View(view);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddAchievement(AchievementViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var petAchievement = await _converterHelper.ToPetAchievementAsync(model, true);
+                _context.PetAchievements.Add(petAchievement);
+                await _context.SaveChangesAsync();
+                return RedirectToAction($"{nameof(DetailsPet)}/{model.PetId}");
+            }
+            model.Achievements = _combosHelper.GetComboAchievements();
+            return View(model);
+        }
 
         public async Task<IActionResult> AddCommitment(int? id)
         {

@@ -87,18 +87,20 @@ namespace Zooterapp.Web.Helpers
             };
         }
 
-        public PetAchievementViewModel ToPetAchievement(PetAchievement petachievement)
-        {
-            return new PetAchievementViewModel
-            {
-                Id = petachievement.Id,
-                PetAchievements = _combosHelper.GetComboPetsAchievements(),
-                PetAchievementID = petachievement.AchievementId,
-                Pet = petachievement.Pet,
-                PetId = petachievement.PetId,
-            };
-        }
-        public async Task<PetAchievement> ToPetAchievementAsync(PetAchievementViewModel model, bool isNew)
+        //public PetAchievementViewModel ToPetAchievement(PetAchievement petachievement)
+        //{
+        //    return new PetAchievementViewModel
+        //    {
+        //        Id = petachievement.Id,
+        //        PetAchievements = _combosHelper.GetComboPetsAchievements(),
+        //        PetAchievementID = petachievement.AchievementId,
+        //        Pet = petachievement.Pet,
+        //        PetId = petachievement.PetId,
+        //    };
+        //}
+
+
+        public async Task<PetAchievement> ToPetAchievementAsync(AchievementViewModel model, bool isNew)
         {
             return new PetAchievement
             {

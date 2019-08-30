@@ -8,8 +8,8 @@ namespace Zooterapp.Web.Helpers
     {
         Task<Commitment> ToCommitmentAsync(CommitmentViewModel view, bool isNew);
         CommitmentViewModel ToCommitmentViewModel(Commitment commitment);
-        PetAchievementViewModel ToPetAchievement(PetAchievement petachievement);
-        Task<PetAchievement> ToPetAchievementAsync(PetAchievementViewModel model, bool isNew);
+        //PetAchievementViewModel ToPetAchievement(PetAchievement petachievement);
+        Task<PetAchievement> ToPetAchievementAsync(AchievementViewModel model, bool isNew);
         Task<Pet> ToPetAsync(PetViewModel model, bool isNew);
         PetViewModel ToPetViewModel(Pet pet);
     }

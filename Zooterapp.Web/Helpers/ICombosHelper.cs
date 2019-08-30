@@ -15,5 +15,6 @@ namespace Zooterapp.Web.Helpers
         IEnumerable<SelectListItem> GetComboPetsAchievements();
 
         IEnumerable<SelectListItem> GetComboPets();
+        IEnumerable<SelectListItem> GetComboAchievements();
     }
 }

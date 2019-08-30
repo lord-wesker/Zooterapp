@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Zooterapp.Web.Data.Entities
 {
@@ -22,6 +23,7 @@ namespace Zooterapp.Web.Data.Entities
 
         public ICollection<Commitment> Commitments { get; set; }
 
+        [Display(Name="Pet Achievements")]
         public ICollection<PetAchievement> PetAchievements { get; set; }
     }
 }

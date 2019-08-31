@@ -1,24 +1,28 @@
 ﻿using Prism.Commands;
-using Prism.Mvvm;
 using Prism.Navigation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using Zooterapp.Common.Models;
+using Zooterapp.Common.Services;
 
 namespace Zooterap.Prism.ViewModels
 {
+    
     public class LoginPageViewModel : ViewModelBase
     {
+        private readonly IApiService _apiService;
         private string _password;
         private bool _isRunning;
         private bool _isEnabled;
         private DelegateCommand _loginCommand;
 
-        public LoginPageViewModel(INavigationService navigationService) : base(navigationService)
+        public LoginPageViewModel(
+               INavigationService navigationService,
+               IApiService apiService) : base(navigationService)
         {
+            _apiService = apiService;
             Title = "Login";
             IsEnabled = true;
         }
+
 
         public DelegateCommand LoginCommand => _loginCommand ?? (_loginCommand = new DelegateCommand(Login));
 
@@ -56,7 +60,32 @@ namespace Zooterap.Prism.ViewModels
                 return;
             }
 
+            IsRunning = true;
+            IsEnabled = false;
+
+            var request = new TokenRequest
+            {
+                Password = Password,
+                Username = Email
+            };
+
+            var url = App.Current.Resources["UrlAPI"].ToString();
+            var response = await _apiService.GetTokenAsync(url, "Account", "/CreateToken", request);
+
+            if (!response.IsSuccess)
+            {
+                IsEnabled = true;
+                IsRunning = false;
+                await App.Current.MainPage.DisplayAlert("Error", "User or password incorrect.", "Accept");
+                Password = string.Empty;
+                return;
+            }
+
+            IsEnabled = true;
+            IsRunning = false;
+
             await App.Current.MainPage.DisplayAlert("Ok", "We are making progress!", "Accept");
         }
+
     }
 }

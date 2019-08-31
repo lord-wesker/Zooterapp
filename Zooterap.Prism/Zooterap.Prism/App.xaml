@@ -4,8 +4,11 @@
              xmlns:prism="clr-namespace:Prism.DryIoc;assembly=Prism.DryIoc.Forms"
              x:Class="Zooterap.Prism.App">
 	<Application.Resources>
-
-		<!-- Application resource dictionary -->
-
-	</Application.Resources>
+        <ResourceDictionary>
+            <!-- Parameters -->
+            <!--Cambiar la url por la del depliegue-->
+                <x:String x:Key="UrlAPI">https://myleasing.azurewebsites.net/</x:String>
+            
+        </ResourceDictionary>
+    </Application.Resources>
 </prism:PrismApplication>

@@ -4,6 +4,7 @@ using Zooterap.Prism.ViewModels;
 using Zooterap.Prism.Views;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using Zooterapp.Common.Services;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace Zooterap.Prism
@@ -28,6 +29,7 @@ namespace Zooterap.Prism
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
+            containerRegistry.Register<IApiService, ApiService>();
             containerRegistry.RegisterForNavigation<NavigationPage>();
             containerRegistry.RegisterForNavigation<LoginPage, LoginPageViewModel>();
         }

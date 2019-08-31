@@ -56,10 +56,12 @@ namespace Zooterapp.Web.Controllers
             var petOwner = await _context.PetOwners
                 .Include(po => po.User)
                 .Include(po => po.Pets)
-                .ThenInclude(p => p.PetType)
+                    .ThenInclude(p => p.PetType)
                 .Include(po => po.Pets)
-                .ThenInclude(p => p.PetImages)
+                    .ThenInclude(p => p.PetImages)
                 .Include(po => po.Commitments)
+                .Include(po => po.Pets)
+                    .ThenInclude(p => p.PetAchievements)
                 .FirstOrDefaultAsync(po => po.Id == id);
 
             if (petOwner == null)
@@ -155,6 +157,22 @@ namespace Zooterapp.Web.Controllers
             await _context.SaveChangesAsync();
 
             return RedirectToAction($"{nameof(DetailsPet)}/{commitment.Pet.Id}");
+        }
+
+        public async Task<IActionResult> DeleteAchievement(int? id)
+        {
+            if (id == null) return NotFound();
+
+            var achievement = await _context.PetAchievements
+                .Include(c => c.Pet)
+                .FirstOrDefaultAsync(c => c.Id == id);
+
+            if (achievement == null) return NotFound();
+
+            _context.PetAchievements.Remove(achievement);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction($"{nameof(DetailsPet)}/{achievement.Pet.Id}");
         }
 
         public async Task<IActionResult> DeletePet(int? id)
@@ -306,8 +324,32 @@ namespace Zooterapp.Web.Controllers
             return View(model);
         }
 
+        //public async Task<IActionResult> EditAchievement(int? id)
+        //{
+        //    if (id == null) return NotFound();
 
+        //    var Achievement = await _context.PetAchievements
+        //        .Include(c => c.Pet)
+        //        .FirstOrDefaultAsync(c => c.Id == id.Value);
 
+        //    if (Achievement == null) return NotFound();
+
+        //    return View(_converterHelper.ToPetAchievementViewModel(Achievement));
+        //}
+
+        //[HttpPost]
+        //public async Task<IActionResult> EditAchievement(PetAchievementViewModel model)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        var achievement = await _converterHelper.ToPetAchievementAsync(model, false);
+        //        _context.PetAchievements.Update(achievement);
+        //        await _context.SaveChangesAsync();
+        //        return RedirectToAction($"{nameof(DetailsPet)}/{model.PetId}");
+        //    }
+
+        //    return View(model);
+        //}
         ///
 
         public async Task<IActionResult> AddPet(int? id)
@@ -340,6 +382,7 @@ namespace Zooterapp.Web.Controllers
             model.PetTypes = _combosHelper.GetComboPetType();
             return View(model);
         }
+
 
 
         public async Task<IActionResult> EditPet(int? id)
@@ -396,6 +439,7 @@ namespace Zooterapp.Web.Controllers
                 .Include(o => o.PetType)
                 .Include(p => p.PetImages)
                 .Include(p => p.PetAchievements)
+                    .ThenInclude(pa => pa.Achievement)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (pet == null)
             {
@@ -405,6 +449,43 @@ namespace Zooterapp.Web.Controllers
             return View(pet);
         }
 
+        //public async Task<IActionResult> AddAchievement(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    var pet = await _context.Pets.FirstOrDefaultAsync(p => p.Id == id);
+
+        //    if (pet == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    var view = new PetAchievementViewModel
+        //    {
+        //        PetId = pet.Id,
+        //        Pet = pet,
+        //        PetAchievements = _combosHelper.GetComboAchievements(),
+        //    };
+
+        //    return View(view);
+        //}
+
+        //[HttpPost]
+        //public async Task<IActionResult> AddAchievement(PetAchievementViewModel model)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        var petAchievement = await _converterHelper.ToPetAchievementAsync(model, true);
+        //        _context.PetAchievements.Add(petAchievement);
+        //        await _context.SaveChangesAsync();
+        //        return RedirectToAction($"{nameof(DetailsPet)}/{model.PetId}");
+        //    }
+        //    model.PetAchievements = _combosHelper.GetComboAchievements();
+        //    return View(model);
+        //}
 
         public async Task<IActionResult> AddCommitment(int? id)
         {
@@ -494,47 +575,6 @@ namespace Zooterapp.Web.Controllers
                 return RedirectToAction($"{nameof(DetailsPet)}/{model.Id}");
             }
 
-            return View(model);
-        }
-
-        public async Task<IActionResult> AddAchievement(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var pet = await _context.Pets
-                .Include(p => p.Owner)
-                .FirstOrDefaultAsync(p => p.Id == id.Value);
-
-            if (pet == null)
-            {
-                return NotFound();
-            }
-
-            var view = new AchievementViewModel()
-            {
-                PetId = pet.Id,
-                Pet = pet,
-                Achievements = _combosHelper.GetComboAchievements()
-            };
-
-            return View(view);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> AddAchievement(AchievementViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                var petAchievement = await _converterHelper.ToPetAchievementAsync(model);
-
-                _context.PetAchievements.Add(petAchievement);
-                await _context.SaveChangesAsync();
-                return RedirectToAction($"{nameof(DetailsPet)}/{model.PetId}");
-            }
-            model.Achievements = _combosHelper.GetComboAchievements();
             return View(model);
         }
 

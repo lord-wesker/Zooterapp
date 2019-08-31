@@ -88,22 +88,5 @@ namespace Zooterapp.Web.Helpers
 
             return list;
         }
-
-        public IEnumerable<SelectListItem> GetComboAchievements()
-        {
-            var list = _dataContext.Achievements.Select(a => new SelectListItem
-            {
-                Text = a.Name,
-                Value = a.Id.ToString()
-            }).OrderBy(a => a.Text).ToList();
-
-            list.Insert(0, new SelectListItem
-            {
-                Text = "(Select an Achievement ...)",
-                Value = "0",
-            });
-
-            return list;
-        }
     }
 }

@@ -1,0 +1,27 @@
+﻿@model Zooterapp.Web.Models.AchievementViewModel
+@{
+    ViewData["Title"] = "AddAchievement";
+}
+
+<h2>Add Pet Achievement</h2>
+<hr />
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="AddAchievement">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="PetId" />
+
+            <div class="form-group">
+                <label asp-for="AchievementId" class="control-label"></label>
+                <select asp-for="AchievementId" asp-items="Model.Achievements" class="form-control"></select>
+                <span asp-validation-for="AchievementId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Add Achievement" class="btn btn-default" />
+                <a asp-action="DetailsPet" asp-route-id="@Model.PetId" class="btn btn-default">Back to Pet</a>
+            </div>
+        </form>
+    </div>
+</div>

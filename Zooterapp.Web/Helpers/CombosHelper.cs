@@ -72,11 +72,11 @@ namespace Zooterapp.Web.Helpers
             return list;
         }
 
-        public IEnumerable<SelectListItem> GetComboPetsAchievements()
+        public IEnumerable<SelectListItem> GetComboAchievements()
         {
-            var list = _dataContext.PetAchievements.Select(pa => new SelectListItem
+            var list = _dataContext.Achievements.Select(pa => new SelectListItem
             {
-                Text = pa.Achievement.Name,
+                Text = pa.Name,
                 Value = pa.Id.ToString()
             }).OrderBy(pt => pt.Text).ToList();
 

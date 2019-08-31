@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Zooterapp.Web.Data;
 using Zooterapp.Web.Data.Entities;
@@ -87,24 +88,25 @@ namespace Zooterapp.Web.Helpers
             };
         }
 
-        public PetAchievementViewModel ToPetAchievement(PetAchievement petachievement)
+        public AchievementViewModel ToAchievementViewModel(PetAchievement petachievement)
         {
-            return new PetAchievementViewModel
+            return new AchievementViewModel
             {
                 Id = petachievement.Id,
-                PetAchievements = _combosHelper.GetComboPetsAchievements(),
-                PetAchievementID = petachievement.AchievementId,
+                Achievements = _combosHelper.GetComboAchievements(),
+                AchievementId = petachievement.AchievementId,
                 Pet = petachievement.Pet,
                 PetId = petachievement.PetId,
             };
         }
-        public async Task<PetAchievement> ToPetAchievementAsync(PetAchievementViewModel model, bool isNew)
+        public async Task<PetAchievement> ToPetAchievementAsync(AchievementViewModel model)
         {
             return new PetAchievement
             {
-                Id = isNew ? 0 : model.Id,
                 Achievement = await _context.Achievements.FindAsync(model.AchievementId),
+                AchievementId = model.AchievementId,
                 Pet = await _context.Pets.FindAsync(model.PetId),
+                PetId = model.PetId
             };
         }
     }

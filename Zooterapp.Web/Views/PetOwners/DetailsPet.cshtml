@@ -78,6 +78,12 @@
                 <dd>
                     @Html.DisplayFor(model => model.Commitments.Count)
                 </dd>
+                <dt>
+                    Achievements
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.PetAchievements.Count)
+                </dd>
             </dl>
         </div>
     </div>
@@ -114,6 +120,7 @@
     <a asp-action="EditPet" asp-route-id="@Model.Id" class="btn btn-default">Edit</a>
     <a asp-action="AddImage" asp-route-id="@Model.Id" class="btn btn-default">Add Image</a>
     <a asp-action="AddCommitment" asp-route-id="@Model.Id" class="btn btn-default">Add Commitment</a>
+    <a asp-action="AddAchievement" asp-route-id="@Model.Id" class="btn btn-default">Add Achievement</a>
     <a asp-action="Details" asp-route-id="@Model.Owner.Id" class="btn btn-default">Back to Pet Owner</a>
 </div>
 <hr />

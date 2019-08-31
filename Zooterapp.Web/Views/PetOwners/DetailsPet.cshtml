@@ -73,7 +73,7 @@
                     @Html.DisplayFor(model => model.IsAvailable)
                 </dd>
                 <dt>
-                    Contracts
+                    Commitments
                 </dt>
                 <dd>
                     @Html.DisplayFor(model => model.Commitments.Count)
@@ -90,208 +90,250 @@
     <div class="col-md-4">
         <div>
             <h4>Images</h4>
+            <hr />
             @if (Model.PetImages.Count == 0)
             {
                 <div class="alert alert-info PetImages">Not images added yet.</div>
             }
             else
             {
-                <div class="row PetImages">
-                    @foreach (var item in Model.PetImages)
-                    {
-                        @if (!string.IsNullOrEmpty(item.ImageUrl))
+                <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+                    <!-- Indicators -->
+                    <ol class="carousel-indicators">
+                        <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+                        <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+                        <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+                    </ol>
+
+                    <!-- Wrapper for slides -->
+                    <div class="carousel-inner" role="listbox">
+                        <div class="item active">
+                            <img src="@Url.Content(Model.PetImages.ElementAt(0).ImageUrl)" alt="..." style="max-height: 200px;">
+                            <div class="carousel-caption">
+                                <button data-id="@Model.PetImages.ElementAt(0).Id" class="btn btn-default deleteImage" data-toggle="modal" data-target="#deleteDialog">Delete</button>
+                            </div>
+                        </div>
+                        @foreach (var item in Model.PetImages)
                         {
-                            <div class="col-md-12">
-                                <div class="thumbnail">
-                                    <img src="@Url.Content(item.ImageUrl)" alt="Image" class="img-responsive img-thumbnail" />
-                                    <div class="caption">
+                            @if (!string.IsNullOrEmpty(item.ImageUrl))
+                            {
+                                <div class="item">
+                                    <img src="@Url.Content(item.ImageUrl)" alt="" style="max-height: 200px;">
+                                    <div class="carousel-caption">
                                         <button data-id="@item.Id" class="btn btn-default deleteImage" data-toggle="modal" data-target="#deleteDialog">Delete</button>
                                     </div>
                                 </div>
-                            </div>
+                            }
                         }
-                    }
+                    </div>
+
+                    <!-- Controls -->
+                    <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+                        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+                        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
                 </div>
             }
-        </div>
+
+
+
+                @*@if (Model.PetImages.Count == 0)
+                {
+                    <div class="alert alert-info PetImages">Not images added yet.</div>
+                }
+                else
+                {
+                    <div class="row PetImages">
+                        @foreach (var item in Model.PetImages)
+                        {
+                            @if (!string.IsNullOrEmpty(item.ImageUrl))
+                            {
+                                <div class="col-md-12">
+                                    <div class="thumbnail">
+                                        <img src="@Url.Content(item.ImageUrl)" alt="Image" class="img-responsive img-thumbnail" />
+                                        <div class="caption">
+                                            <button data-id="@item.Id" class="btn btn-default deleteImage" data-toggle="modal" data-target="#deleteDialog">Delete</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    </div>
+                }*@
+            </div>
     </div>
 </div>
 <div>
-    <a asp-action="EditPet" asp-route-id="@Model.Id" class="btn btn-default">Edit</a>
-    <a asp-action="AddImage" asp-route-id="@Model.Id" class="btn btn-default">Add Image</a>
-    <a asp-action="AddCommitment" asp-route-id="@Model.Id" class="btn btn-default">Add Commitment</a>
-    <a asp-action="AddAchievement" asp-route-id="@Model.Id" class="btn btn-default">Add Achievement</a>
     <a asp-action="Details" asp-route-id="@Model.Owner.Id" class="btn btn-default">Back to Pet Owner</a>
-</div>
-<hr />
-<div class="row">
-    <div class="col-md-12">
-        <div>
-            <h4>Commitments</h4>
-            @if (Model.Commitments.Count == 0)
-            {
-                <div class="alert alert-info">Not commitments added yet.</div>
-            }
-            else
-            {
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>
-                                Customer
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Commitments.FirstOrDefault().Remarks)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Commitments.FirstOrDefault().Price)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Commitments.FirstOrDefault().StartDate)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Commitments.FirstOrDefault().EndDate)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Commitments.FirstOrDefault().IsActive)
-                            </th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model.Commitments)
-                        {
-                            <tr>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Customer.User.FullNameWithDocument)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Remarks)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Price)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.StartDateLocal)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.EndDateLocal)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.IsActive)
-                                </td>
-                                <td>
-                                    <a asp-action="EditCommitment" asp-route-id="@item.Id" class="btn btn-default">Edit</a>
-                                    <a asp-action="DetailsCommitment" asp-route-id="@item.Id" class="btn btn-default">Details</a>
-                                    <button data-id="@item.Id" class="btn btn-danger deleteCommitment" data-toggle="modal" data-target="#deleteDialog">Delete</button>
 
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            }
-        </div>
+    <div class="btn-group" role="group" aria-label="...">
+        <a asp-action="EditPet" asp-route-id="@Model.Id" class="btn btn-default">Edit</a>
+        <a asp-action="AddImage" asp-route-id="@Model.Id" class="btn btn-default">Add Image</a>
+        <a asp-action="AddCommitment" asp-route-id="@Model.Id" class="btn btn-default">Add Commitment</a>
+        <a asp-action="AddAchievement" asp-route-id="@Model.Id" class="btn btn-default">Add Achievement</a>
     </div>
 </div>
-
-<div class="row">
-    <div class="col-md-12">
-        <div>
-            <h4>Achievements</h4>
-            @if (Model.PetAchievements.Count == 0)
-            {
-                <div class="alert alert-info">Not Achievements added yet.</div>
-            }
-            else
-            {
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>
-                                @Html.DisplayNameFor(model => model.PetAchievements.FirstOrDefault().Achievement)
-                            </th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">Pet Achievements</div>
+                <ul class="list-group">
+                    @if (Model.PetAchievements.Count == 0)
+                    {
+                        <li class="list-group-item list-group-item-info">Not Achievements added yet.</li>
+                    }
+                    else
+                    {
                         @foreach (var item in Model.PetAchievements)
                         {
-                            <tr>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Achievement.Name)
-                                </td>
-                                <td>
-                                    <a asp-action="EditAchievement" asp-route-id="@item.Id" class="btn btn-default">Edit</a>
-                                    <button data-id="@item.Id" class="btn btn-danger deleteAchievement" data-toggle="modal" data-target="#deleteDialog">Delete</button>
-
-                                </td>
-                            </tr>
+                            <li class="list-group-item">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        @Html.DisplayNameFor(model => model.PetAchievements.FirstOrDefault().Achievement)
+                                    </div>
+                                    <div class="col-md-6 text-right">
+                                        <button data-id="@item.Id" class="btn btn-danger deleteAchievement" data-toggle="modal" data-target="#deleteDialog">Delete</button>
+                                    </div>
+                                </div>
+                            </li>
                         }
-                    </tbody>
-                </table>
-            }
-        </div>
-    </div>
-</div>
-
-<!--Delete Item-->
-<div class="modal fade" id="deleteDialog" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Delete Item</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p>Do you want to delete the record?</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-danger" id="btnYesDelete">Delete</button>
+                    }
+                </ul>
             </div>
         </div>
+        <div class="col-md-8">
+            <div class="panel panel-default">
+                <div class="panel-heading">Commitments</div>
+                @if (Model.Commitments.Count == 0)
+                {
+                    <div class="alert alert-info">Not commitments added yet.</div>
+                }
+                else
+                {
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Customer
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Commitments.FirstOrDefault().Remarks)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Commitments.FirstOrDefault().Price)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Commitments.FirstOrDefault().StartDate)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Commitments.FirstOrDefault().EndDate)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Commitments.FirstOrDefault().IsActive)
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.Commitments)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Customer.User.FullNameWithDocument)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Remarks)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Price)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.StartDateLocal)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.EndDateLocal)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.IsActive)
+                                    </td>
+                                    <td>
+                                        <div class="btn-group-vertical">
+                                            <a asp-action="EditCommitment" asp-route-id="@item.Id" class="btn btn-default"><span class="glyphicon glyphicon-edit" /></a>
+                                            <a asp-action="DetailsCommitment" asp-route-id="@item.Id" class="btn btn-default"><span class="glyphicon glyphicon-list" /></a>
+                                            <button data-id="@item.Id" class="btn btn-danger deleteCommitment" data-toggle="modal" data-target="#deleteDialog"><span class="glyphicon glyphicon-trash" /></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+            </div>
+        </div>
     </div>
-</div>
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <!--Delete Item-->
+    <div class="modal fade" id="deleteDialog" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Delete Item</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Do you want to delete the record?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-danger" id="btnYesDelete">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <script type="text/javascript">
-    	$(document).ready(function () {
-        	// Delete item
-        	var item_to_delete;
-        	var action_to_delete;
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
-        	$('.deleteImage').click((e) => {
-            	item_to_delete = e.currentTarget.dataset.id;
-            	action_to_delete = 1;
-        	});
+        <script type="text/javascript">
+            $(document).ready(function () {
+                // Delete item
+                var item_to_delete;
+                var action_to_delete;
 
-        	$('.deleteCommitment').click((e) => {
-            	item_to_delete = e.currentTarget.dataset.id;
-            	action_to_delete = 2;
+                $('.deleteImage').click((e) => {
+                    item_to_delete = e.currentTarget.dataset.id;
+                    action_to_delete = 1;
+                });
+
+                $('.deleteCommitment').click((e) => {
+                    item_to_delete = e.currentTarget.dataset.id;
+                    action_to_delete = 2;
+                });
+
+                $('.deleteAchievement').click((e) => {
+                    item_to_delete = e.currentTarget.dataset.id;
+                    action_to_delete = 3;
+                });
+
+
+                $("#btnYesDelete").click(function () {
+                    if (action_to_delete == 1) {
+                        window.location.href = '/PetOwners/DeleteImage/' + item_to_delete;
+                    }
+                    if (action_to_delete == 2) {
+                        window.location.href = '/PetOwners/DeleteCommitment/' + item_to_delete;
+                    }
+                    if (action_to_delete == 3) {
+                        window.location.href = '/PetOwners/DeleteAchievement/' + item_to_delete;
+                    }
+                });
             });
-
-            $('.deleteAchievement').click((e) => {
-            	item_to_delete = e.currentTarget.dataset.id;
-            	action_to_delete = 3;
-            });
-                
-
-        	$("#btnYesDelete").click(function () {
-            	if (action_to_delete == 1) {
-                	window.location.href = '/PetOwners/DeleteImage/' + item_to_delete;
-                }
-                if (action_to_delete == 2){
-                	window.location.href = '/PetOwners/DeleteCommitment/' + item_to_delete;
-                }
-                if (action_to_delete == 3){
-                	window.location.href = '/PetOwners/DeleteAchievement/' + item_to_delete;
-                }
-        	});
-    	});
-    </script>
-}
+        </script>
+    }

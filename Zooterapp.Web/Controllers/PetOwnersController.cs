@@ -170,6 +170,7 @@ namespace Zooterapp.Web.Controllers
             if (achievement == null) return NotFound();
 
             _context.PetAchievements.Remove(achievement);
+            await _context.SaveChangesAsync();
 
             return RedirectToAction($"{nameof(DetailsPet)}/{achievement.Pet.Id}");
         }

@@ -100,14 +100,26 @@ namespace Zooterapp.Web.Helpers
         //}
 
 
-        public async Task<PetAchievement> ToPetAchievementAsync(AchievementViewModel model, bool isNew)
-        {
-            return new PetAchievement
-            {
-                Id = isNew ? 0 : model.Id,
-                Achievement = await _context.Achievements.FindAsync(model.AchievementId),
-                Pet = await _context.Pets.FindAsync(model.PetId),
-            };
-        }
+        //public async Task<PetAchievement> ToPetAchievementAsync(PetAchievementViewModel model, bool isNew)
+        //{
+        //    return new PetAchievement
+        //    {
+        //        Id = isNew ? 0 : model.PetAchievementID,
+        //        Achievement = await _context.Achievements.FindAsync(model.AchievementId),
+        //        Pet = await _context.Pets.FindAsync(model.PetId),
+        //        PetId = model.PetId,
+        //        AchievementId = model.AchievementId,
+        //    };
+        //}
+
+        //public PetAchievementViewModel ToPetAchievementViewModel(PetAchievement petAchievement)
+        //{
+        //    return new PetAchievementViewModel
+        //    {
+        //        Id = petAchievement.Id,
+        //        Achievement = petAchievement.Achievement,
+        //        PetId = petAchievement.PetId
+        //    };
+        //}
     }
 }

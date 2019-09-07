@@ -5,12 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using Zooterapp.Common.Models;
 using Newtonsoft.Json;
+using Plugin.Connectivity;
 
 namespace Zooterapp.Common.Services
 {
     public class ApiService : IApiService
     {
-        public async Task<Response> GetTokenAsync(
+        public async Task<Response<TokenResponse>> GetTokenAsync(
             string urlBase,
             string servicePrefix,
             string controller,
@@ -31,7 +32,7 @@ namespace Zooterapp.Common.Services
 
                 if (!response.IsSuccessStatusCode)
                 {
-                    return new Response
+                    return new Response<TokenResponse>
                     {
                         IsSuccess = false,
                         Message = result,
@@ -39,7 +40,7 @@ namespace Zooterapp.Common.Services
                 }
 
                 var token = JsonConvert.DeserializeObject<TokenResponse>(result);
-                return new Response
+                return new Response<TokenResponse>
                 {
                     IsSuccess = true,
                     Result = token
@@ -47,7 +48,7 @@ namespace Zooterapp.Common.Services
             }
             catch (Exception ex)
             {
-                return new Response
+                return new Response<TokenResponse>
                 {
                     IsSuccess = false,
                     Message = ex.Message
@@ -55,7 +56,7 @@ namespace Zooterapp.Common.Services
             }
         }
 
-        public async Task<Response> GetOwnerByEmail(
+        public async Task<Response<PetOwnerResponse>> GetPetOwnerByEmailAsync(
             string urlBase,
             string servicePrefix,
             string controller,
@@ -80,7 +81,7 @@ namespace Zooterapp.Common.Services
 
                 if (!response.IsSuccessStatusCode)
                 {
-                    return new Response
+                    return new Response<PetOwnerResponse>
                     {
                         IsSuccess = false,
                         Message = result,
@@ -88,7 +89,7 @@ namespace Zooterapp.Common.Services
                 }
 
                 var petOwner = JsonConvert.DeserializeObject<PetOwnerResponse>(result);
-                return new Response
+                return new Response<PetOwnerResponse>
                 {
                     IsSuccess = true,
                     Result = petOwner
@@ -96,12 +97,23 @@ namespace Zooterapp.Common.Services
             }
             catch (Exception ex)
             {
-                return new Response
+                return new Response<PetOwnerResponse>
                 {
                     IsSuccess = false,
                     Message = ex.Message
                 };
             }
         }
+
+        public async Task<bool> CheckConnectionAsync(string url)
+        {
+            if (!CrossConnectivity.Current.IsConnected)
+            {
+                return false;
+            }
+
+            return await CrossConnectivity.Current.IsRemoteReachable(url);
+        }
+
     }
 }

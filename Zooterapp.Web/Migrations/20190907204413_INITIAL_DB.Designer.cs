@@ -10,8 +10,8 @@ using Zooterapp.Web.Data;
 namespace Zooterapp.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20190813234327_PetTypesWithoutRaces")]
-    partial class PetTypesWithoutRaces
+    [Migration("20190907204413_INITIAL_DB")]
+    partial class INITIAL_DB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -221,15 +221,15 @@ namespace Zooterapp.Web.Migrations
 
                     b.Property<int?>("OwnerId");
 
-                    b.Property<int?>("TypeId");
+                    b.Property<int?>("PetTypeId");
 
-                    b.Property<string>("race");
+                    b.Property<string>("Race");
 
                     b.HasKey("Id");
 
                     b.HasIndex("OwnerId");
 
-                    b.HasIndex("TypeId");
+                    b.HasIndex("PetTypeId");
 
                     b.ToTable("Pets");
                 });
@@ -462,7 +462,7 @@ namespace Zooterapp.Web.Migrations
 
                     b.HasOne("Zooterapp.Web.Data.Entities.PetType", "PetType")
                         .WithMany("Pets")
-                        .HasForeignKey("TypeId");
+                        .HasForeignKey("PetTypeId");
                 });
 
             modelBuilder.Entity("Zooterapp.Web.Data.Entities.PetAchievement", b =>

@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Zooterapp.Web.Migrations
 {
-    public partial class Users : Migration
+    public partial class INITIAL_DB : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -57,8 +57,6 @@ namespace Zooterapp.Web.Migrations
                     Document = table.Column<string>(nullable: true),
                     Name = table.Column<string>(nullable: true),
                     LastName = table.Column<string>(nullable: true),
-                    Phone = table.Column<string>(nullable: true),
-                    CellPhone = table.Column<string>(nullable: true),
                     Address = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -72,8 +70,7 @@ namespace Zooterapp.Web.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(nullable: true),
-                    race = table.Column<string>(nullable: true)
+                    Name = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -206,6 +203,25 @@ namespace Zooterapp.Web.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Managers",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    UserId = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Managers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Managers_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "PetOwners",
                 columns: table => new
                 {
@@ -232,7 +248,8 @@ namespace Zooterapp.Web.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(nullable: true),
                     Age = table.Column<int>(nullable: false),
-                    TypeId = table.Column<int>(nullable: true),
+                    PetTypeId = table.Column<int>(nullable: true),
+                    Race = table.Column<string>(nullable: true),
                     OwnerId = table.Column<int>(nullable: true),
                     IsAvailable = table.Column<bool>(nullable: false)
                 },
@@ -246,8 +263,8 @@ namespace Zooterapp.Web.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Pets_PetTypes_TypeId",
-                        column: x => x.TypeId,
+                        name: "FK_Pets_PetTypes_PetTypeId",
+                        column: x => x.PetTypeId,
                         principalTable: "PetTypes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -425,6 +442,11 @@ namespace Zooterapp.Web.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Managers_UserId",
+                table: "Managers",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_PetAchievements_AchievementId",
                 table: "PetAchievements",
                 column: "AchievementId");
@@ -460,9 +482,9 @@ namespace Zooterapp.Web.Migrations
                 column: "OwnerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Pets_TypeId",
+                name: "IX_Pets_PetTypeId",
                 table: "Pets",
-                column: "TypeId");
+                column: "PetTypeId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -481,6 +503,9 @@ namespace Zooterapp.Web.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "Managers");
 
             migrationBuilder.DropTable(
                 name: "PetAchievements");

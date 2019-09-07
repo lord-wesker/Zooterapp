@@ -8,6 +8,7 @@ namespace Zooterap.Prism.ViewModels
     
     public class LoginPageViewModel : ViewModelBase
     {
+        private readonly INavigationService _navigationService;
         private readonly IApiService _apiService;
         private string _password;
         private bool _isRunning;
@@ -18,9 +19,14 @@ namespace Zooterap.Prism.ViewModels
                INavigationService navigationService,
                IApiService apiService) : base(navigationService)
         {
+            _navigationService = navigationService;
             _apiService = apiService;
             Title = "Login";
             IsEnabled = true;
+
+            //TODO: delete this lines
+            Email = "yeison.calle@hotmail.com";
+            Password = "123456";
         }
 
 
@@ -63,13 +69,23 @@ namespace Zooterap.Prism.ViewModels
             IsRunning = true;
             IsEnabled = false;
 
+            var url = App.Current.Resources["UrlAPI"].ToString();
+            var connection = await _apiService.CheckConnectionAsync(url);
+            if (!connection)
+            {
+                IsEnabled = true;
+                IsRunning = false;
+                await App.Current.MainPage.DisplayAlert("Error", "Check the internet connection.", "Accept");
+                return;
+            }
+
+
             var request = new TokenRequest
             {
                 Password = Password,
                 Username = Email
             };
 
-            var url = App.Current.Resources["UrlAPI"].ToString();
             var response = await _apiService.GetTokenAsync(url, "Account", "/CreateToken", request);
 
             if (!response.IsSuccess)
@@ -81,10 +97,9 @@ namespace Zooterap.Prism.ViewModels
                 return;
             }
 
-            IsEnabled = true;
-            IsRunning = false;
+            var token = response.Result;
+            await _navigationService.NavigateAsync("PetsPage");
 
-            await App.Current.MainPage.DisplayAlert("Ok", "We are making progress!", "Accept");
         }
 
     }

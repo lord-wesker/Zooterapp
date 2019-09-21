@@ -8,10 +8,11 @@
     
     <StackLayout
     	Padding="10">
-        <Label
-        	HorizontalOptions="CenterAndExpand"
-        	Text="{Binding Title}"
-        	VerticalOptions="CenterAndExpand"/>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height=""/>
+            </Grid.RowDefinitions>
+        </Grid>
     </StackLayout>
 
 

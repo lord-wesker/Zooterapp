@@ -8,11 +8,11 @@
     
     <StackLayout
     	Padding="10">
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height=""/>
-            </Grid.RowDefinitions>
-        </Grid>
+        <ListView
+            HasUnevenRows="True"
+            ItemsSource="{Binding Pets}">
+            
+        </ListView>
     </StackLayout>
 
 

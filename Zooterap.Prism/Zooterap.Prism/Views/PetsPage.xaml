@@ -6,28 +6,26 @@
              x:Class="Zooterap.Prism.Views.PetsPage"
              Title="{Binding Title}">
     
-    <StackLayout
-    	Padding="10">
+    <StackLayout Padding="0, 10, 0, 0">
         <ListView
+            BackgroundColor="Transparent"
+            SeparatorVisibility="None"
             HasUnevenRows="True"
             ItemsSource="{Binding Pets}">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
-                            <Frame HasShadow="True" CornerRadius="3">
-                                <Grid Grid.Column="0">
+                        <Grid Margin="10, 0, 10, 10">
+                            <Frame HasShadow="True" CornerRadius="3" Padding="0">
+                                <Grid>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto"/>
                                         <RowDefinition Height="Auto"/>
                                         <RowDefinition Height="Auto"/>
                                         <RowDefinition Height="Auto"/>
                                     </Grid.RowDefinitions>
-                                    <Image Grid.Row="0" Source="{Binding FirstImage}"/>
-                                    <Frame Grid.Row="1" HasShadow="True" CornerRadius="10" Margin="20, -40, 20, 0">
+                                    <Image Grid.Row="0" Source="{Binding FirstImage}" Aspect="AspectFill" VerticalOptions="Center" HeightRequest="300" HorizontalOptions="FillAndExpand" WidthRequest="300"/>
+                                    <Frame Grid.Row="1" HasShadow="True" CornerRadius="10" Margin="10, -40, 10, 0">
                                         <Grid HorizontalOptions="FillAndExpand" VerticalOptions="CenterAndExpand">
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="*" />
@@ -35,21 +33,21 @@
                                                 <ColumnDefinition Width="*" />
                                                 <ColumnDefinition Width="*" />
                                             </Grid.ColumnDefinitions>
-                                            <StackLayout Orientation="Vertical" Spacing="10" HorizontalOptions="CenterAndExpand">
-                                                <Label Text="{Binding Name}" />
-                                                <Label Text="Name" />
+                                            <StackLayout Orientation="Vertical" Spacing="5" HorizontalOptions="CenterAndExpand">
+                                                <Label Text="{Binding Name}" FontAttributes="Bold" HorizontalOptions="Center"/>
+                                                <Label Text="Name" HorizontalOptions="Center" FontSize="11"/>
                                             </StackLayout>
-                                            <StackLayout Orientation="Vertical" Spacing="10" HorizontalOptions="CenterAndExpand">
-                                                <Label Text="{Binding Race}" />
-                                                <Label Text="Race" />
+                                            <StackLayout Grid.Column="1" Orientation="Vertical" Spacing="5" HorizontalOptions="CenterAndExpand">
+                                                <Label Text="{Binding Race}" FontAttributes="Bold" HorizontalOptions="Center" FontSize="14"/>
+                                                <Label Text="Race" HorizontalOptions="Center" FontSize="11"/>
                                             </StackLayout>
-                                            <StackLayout Orientation="Vertical" Spacing="10" HorizontalOptions="CenterAndExpand">
-                                                <Label Text="{Binding Age}" />
-                                                <Label Text="Age" />
+                                            <StackLayout Grid.Column="2" Orientation="Vertical" Spacing="5" HorizontalOptions="CenterAndExpand">
+                                                <Label Text="{Binding Age}" FontAttributes="Bold" HorizontalOptions="Center" FontSize="14"/>
+                                                <Label Text="Age" HorizontalOptions="Center" FontSize="11"/>
                                             </StackLayout>
-                                            <StackLayout Orientation="Vertical" Spacing="10" HorizontalOptions="CenterAndExpand">
-                                                <Label Text="{Binding PetType}" />
-                                                <Label Text="Type" />
+                                            <StackLayout Grid.Column="3" Orientation="Vertical" Spacing="5" HorizontalOptions="CenterAndExpand">
+                                                <Label Text="{Binding PetType}" FontAttributes="Bold" HorizontalOptions="Center" FontSize="14"/>
+                                                <Label Text="Type" HorizontalOptions="Center" FontSize="11"/>
                                             </StackLayout>
                                         </Grid>
                                     </Frame>

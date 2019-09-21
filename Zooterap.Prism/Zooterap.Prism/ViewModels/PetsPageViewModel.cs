@@ -28,7 +28,7 @@ namespace Zooterap.Prism.ViewModels
             {
                 _petOwner = parameters.GetValue<PetOwnerResponse>("petOwner");
                 Title = $"{_petOwner.FirstName}'s Pets";
-                _pets = new ObservableCollection<PetResponse>(_petOwner.Pets);
+                Pets = new ObservableCollection<PetResponse>(_petOwner.Pets);
             }
         }
     }

@@ -25,7 +25,7 @@ namespace Zooterap.Prism.ViewModels
             IsEnabled = true;
 
             //TODO: delete this lines
-            Email = "yeison.calle@hotmail.com";
+            Email = "acahona2@correo.com";
             Password = "123456";
         }
 

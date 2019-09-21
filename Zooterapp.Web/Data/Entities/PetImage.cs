@@ -13,8 +13,8 @@ namespace Zooterapp.Web.Data.Entities
 
         // TODO: CHANGE PROJECT PATH
         public string ImageFullPath => string.IsNullOrEmpty(ImageUrl)
-            ? "https://TBD.azurewebsites.net/images/Properties/noImage.png"
-            : $"https://TBD.azurewebsites.net/{ImageUrl.Substring(1)}";
+            ? "https://zooterappweb.azurewebsites.net/images/Pets/noImage.png"
+            : $"https://zooterappweb.azurewebsites.net/{ImageUrl.Substring(1)}";
 
     }
 }

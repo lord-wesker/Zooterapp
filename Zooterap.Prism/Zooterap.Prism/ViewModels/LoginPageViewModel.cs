@@ -98,8 +98,25 @@ namespace Zooterap.Prism.ViewModels
             }
 
             var token = response.Result;
-            await _navigationService.NavigateAsync("PetsPage");
+            var nextResponse = await _apiService.GetPetOwnerByEmailAsync(
+                    url,
+                    "api",
+                    "/PetOwners/GetPetOwnerByEmail",
+                    "bearer",
+                    token.Token,
+                    Email
+                );
 
+            var petOwner = nextResponse.Result;
+
+            var parameters = new NavigationParameters
+            {
+                { "petOwner", petOwner }
+            };
+
+            await _navigationService.NavigateAsync("PetsPage", parameters);
+            IsEnabled = true;
+            IsRunning = false;
         }
 
     }

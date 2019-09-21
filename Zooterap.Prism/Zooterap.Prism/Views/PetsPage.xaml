@@ -11,7 +11,54 @@
         <ListView
             HasUnevenRows="True"
             ItemsSource="{Binding Pets}">
-            
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Frame HasShadow="True" CornerRadius="3">
+                                <Grid Grid.Column="0">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    <Image Grid.Row="0" Source="{Binding FirstImage}"/>
+                                    <Frame Grid.Row="1" HasShadow="True" CornerRadius="10" Margin="20, -40, 20, 0">
+                                        <Grid HorizontalOptions="FillAndExpand" VerticalOptions="CenterAndExpand">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
+                                            <StackLayout Orientation="Vertical" Spacing="10" HorizontalOptions="CenterAndExpand">
+                                                <Label Text="{Binding Name}" />
+                                                <Label Text="Name" />
+                                            </StackLayout>
+                                            <StackLayout Orientation="Vertical" Spacing="10" HorizontalOptions="CenterAndExpand">
+                                                <Label Text="{Binding Race}" />
+                                                <Label Text="Race" />
+                                            </StackLayout>
+                                            <StackLayout Orientation="Vertical" Spacing="10" HorizontalOptions="CenterAndExpand">
+                                                <Label Text="{Binding Age}" />
+                                                <Label Text="Age" />
+                                            </StackLayout>
+                                            <StackLayout Orientation="Vertical" Spacing="10" HorizontalOptions="CenterAndExpand">
+                                                <Label Text="{Binding PetType}" />
+                                                <Label Text="Type" />
+                                            </StackLayout>
+                                        </Grid>
+                                    </Frame>
+                                </Grid>
+                            </Frame>
+                        </Grid>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
         </ListView>
     </StackLayout>
 

@@ -15,7 +15,8 @@
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
-                        <Grid Margin="10, 0, 10, 10">
+                        <Grid Margin="10, 0, 10, 10"
+                              BackgroundColor="Transparent">
                             <Frame HasShadow="True" CornerRadius="3" Padding="0">
                                 <Grid>
                                     <Grid.RowDefinitions>
@@ -59,6 +60,4 @@
             </ListView.ItemTemplate>
         </ListView>
     </StackLayout>
-
-
 </ContentPage>

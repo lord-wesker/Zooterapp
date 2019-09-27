@@ -8,10 +8,10 @@
     
     <StackLayout
     	Padding="10">
-        <Label
-        	HorizontalOptions="CenterAndExpand"
-        	Text="{Binding Title}"
-        	VerticalOptions="CenterAndExpand"/>
+        <ListView
+            HasUnevenRows="True"
+            ItemsSource="{Binding Pets}">
+        </ListView>
     </StackLayout>
 
 

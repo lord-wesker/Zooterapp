@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
+             xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+             prism:ViewModelLocator.AutowireViewModel="True"
+             x:Class="Zooterap.Prism.Views.PetPage"
+             Title="{Binding Title}">
+    <StackLayout>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <ffimageloading:CachedImage Source="{Binding Pet.FirstImage}" Aspect="AspectFill" VerticalOptions="Center" HeightRequest="300" HorizontalOptions="FillAndExpand" WidthRequest="300"/>
+            <Frame Grid.Row="1" HasShadow="True" CornerRadius="10" Margin="10, -40, 10, 0">
+                <Grid HorizontalOptions="FillAndExpand" VerticalOptions="CenterAndExpand">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <StackLayout Orientation="Vertical" Spacing="5" HorizontalOptions="CenterAndExpand">
+                        <Label Text="{Binding Pet.Name}" FontAttributes="Bold" HorizontalOptions="Center"/>
+                        <Label Text="Name" HorizontalOptions="Center" FontSize="11"/>
+                    </StackLayout>
+                    <StackLayout Grid.Column="1" Orientation="Vertical" Spacing="5" HorizontalOptions="CenterAndExpand">
+                        <Label Text="{Binding Pet.Race}" FontAttributes="Bold" HorizontalOptions="Center" FontSize="14"/>
+                        <Label Text="Race" HorizontalOptions="Center" FontSize="11"/>
+                    </StackLayout>
+                    <StackLayout Grid.Column="2" Orientation="Vertical" Spacing="5" HorizontalOptions="CenterAndExpand">
+                        <Label Text="{Binding Pet.Age}" FontAttributes="Bold" HorizontalOptions="Center" FontSize="14"/>
+                        <Label Text="Age" HorizontalOptions="Center" FontSize="11"/>
+                    </StackLayout>
+                    <StackLayout Grid.Column="3" Orientation="Vertical" Spacing="5" HorizontalOptions="CenterAndExpand">
+                        <Label Text="{Binding Pet.PetType}" FontAttributes="Bold" HorizontalOptions="Center" FontSize="14"/>
+                        <Label Text="Type" HorizontalOptions="Center" FontSize="11"/>
+                    </StackLayout>
+                </Grid>
+            </Frame>
+        </Grid>
+    </StackLayout>
+</ContentPage>

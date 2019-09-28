@@ -2,11 +2,12 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
+             xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
              prism:ViewModelLocator.AutowireViewModel="True"
              x:Class="Zooterap.Prism.Views.PetsPage"
              Title="{Binding Title}">
     
-    <StackLayout Padding="0, 10, 0, 0">
+    <StackLayout Padding="0">
         <ListView
             BackgroundColor="Transparent"
             SeparatorVisibility="None"
@@ -15,9 +16,11 @@
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
-                        <Grid Margin="10, 0, 10, 10"
-                              BackgroundColor="Transparent">
-                            <Frame HasShadow="True" CornerRadius="3" Padding="0">
+                        <Grid>
+                            <Frame HasShadow="True" CornerRadius="3" Padding="0" Margin="10, 5, 10, 5">
+                                <Frame.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding SelectPetCommand}" />
+                                </Frame.GestureRecognizers>
                                 <Grid>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto"/>
@@ -25,7 +28,7 @@
                                         <RowDefinition Height="Auto"/>
                                         <RowDefinition Height="Auto"/>
                                     </Grid.RowDefinitions>
-                                    <Image Grid.Row="0" Source="{Binding FirstImage}" Aspect="AspectFill" VerticalOptions="Center" HeightRequest="300" HorizontalOptions="FillAndExpand" WidthRequest="300"/>
+                                    <ffimageloading:CachedImage Source="{Binding FirstImage}" Aspect="AspectFill" VerticalOptions="Center" HeightRequest="300" HorizontalOptions="FillAndExpand" WidthRequest="300"/>
                                     <Frame Grid.Row="1" HasShadow="True" CornerRadius="10" Margin="10, -40, 10, 0">
                                         <Grid HorizontalOptions="FillAndExpand" VerticalOptions="CenterAndExpand">
                                             <Grid.ColumnDefinitions>

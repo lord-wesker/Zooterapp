@@ -7,7 +7,11 @@
             Title="{Binding Title}">
 
             <StackLayout
-    	        Padding="10">
+                AbsoluteLayout.LayoutBounds="0,0,1,1"
+                AbsoluteLayout.LayoutFlags="All"
+    	        Padding="34, 21"
+                VerticalOptions="CenterAndExpand">
+                <Image Source="logo" Margin="21" />
                 <Label
         	        Text="Email"/>
                 <Entry
@@ -24,6 +28,8 @@
         	        IsRunning="{Binding IsRunning}"
         	        VerticalOptions="CenterAndExpand"/>
                 <Button
+                    BackgroundColor="Accent"
+                    TextColor="White"
         	        Command="{Binding LoginCommand}"
         	        IsEnabled="{Binding IsEnabled}"
         	        Text="Login"/>

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
@@ -9,9 +10,9 @@ using Zooterapp.Web.Data.Entities;
 
 namespace Zooterapp.Web.Controllers.API
 {
-    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class PetOwnersController : ControllerBase
     {
         private readonly DataContext _dataContext;
@@ -23,7 +24,7 @@ namespace Zooterapp.Web.Controllers.API
 
         [HttpPost]
         [Route("GetPetOwnerByEmail")]
-        public async Task<IActionResult> GetOwnerByEmailAsync(EmailRequest request)
+        public async Task<IActionResult> GetPetOwnerByEmailAsync(EmailRequest request)
         {
             if (!ModelState.IsValid)
             {

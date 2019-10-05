@@ -98,19 +98,14 @@
             else
             {
                 <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
-                    <!-- Indicators -->
-                    <ol class="carousel-indicators">
-                        <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
-                        <li data-target="#carousel-example-generic" data-slide-to="1"></li>
-                        <li data-target="#carousel-example-generic" data-slide-to="2"></li>
-                    </ol>
-
                     <!-- Wrapper for slides -->
                     <div class="carousel-inner" role="listbox">
                         <div class="item active">
-                            <img src="@Url.Content(Model.PetImages.ElementAt(0).ImageUrl)" alt="..." style="max-height: 200px;">
-                            <div class="carousel-caption">
-                                <button data-id="@Model.PetImages.ElementAt(0).Id" class="btn btn-default deleteImage" data-toggle="modal" data-target="#deleteDialog">Delete</button>
+                            <img src="@Url.Content(Model.PetImages.ElementAt(0).ImageUrl)" style="max-height: 372px;width:100%;">
+                            <div class="carousel-caption" style="top: 0;text-align:right;">
+                                <button data-id="@Model.PetImages.ElementAt(0).Id" class="btn btn-danger deleteImage" data-toggle="modal" data-target="#deleteDialog">
+                                    <span class="glyphicon glyphicon-trash"></span>
+                                </button>
                             </div>
                         </div>
                         @foreach (var item in Model.PetImages)
@@ -118,9 +113,11 @@
                             @if (!string.IsNullOrEmpty(item.ImageUrl))
                             {
                                 <div class="item">
-                                    <img src="@Url.Content(item.ImageUrl)" alt="" style="max-height: 200px;">
-                                    <div class="carousel-caption">
-                                        <button data-id="@item.Id" class="btn btn-default deleteImage" data-toggle="modal" data-target="#deleteDialog">Delete</button>
+                                    <img src="@Url.Content(item.ImageUrl)" style="max-height: 372px;width:100%;">
+                                    <div class="carousel-caption" style="top: 0;text-align:right;">
+                                        <button data-id="@item.Id" class="btn btn-danger deleteImage" data-toggle="modal" data-target="#deleteDialog">
+                                            <span class="glyphicon glyphicon-trash"></span>
+                                        </button>
                                     </div>
                                 </div>
                             }
@@ -194,7 +191,7 @@
                             <li class="list-group-item">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        @Html.DisplayNameFor(model => model.PetAchievements.FirstOrDefault().Achievement)
+                                        @Html.DisplayFor(model => model.PetAchievements.FirstOrDefault().Achievement.Name)
                                     </div>
                                     <div class="col-md-6 text-right">
                                         <button data-id="@item.Id" class="btn btn-danger deleteAchievement" data-toggle="modal" data-target="#deleteDialog">Delete</button>

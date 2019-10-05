@@ -25,7 +25,7 @@ namespace Zooterap.Prism.ViewModels
             IsEnabled = true;
 
             //TODO: delete this lines
-            Email = "yeison.calle@hotmail.com";
+            Email = "acahona2@correo.com";
             Password = "123456";
         }
 
@@ -122,6 +122,9 @@ namespace Zooterap.Prism.ViewModels
             IsEnabled = true;
             IsRunning = false;
 
+            await _navigationService.NavigateAsync("PetsPage", parameters);
+            IsEnabled = true;
+            IsRunning = false;
         }
 
     }

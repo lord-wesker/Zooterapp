@@ -2,11 +2,14 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Zooterapp.Web.Data;
+using Zooterapp.Web.Data.Entities;
 using Zooterapp.Web.Helpers;
 using Zooterapp.Web.Models;
 
@@ -16,11 +19,19 @@ namespace Zooterapp.Web.Controllers
     {
         private readonly IUserHelper _userHelper;
         private readonly IConfiguration _configuration;
+        private readonly ICombosHelper _combosHelper;
+        private readonly DataContext _dataContext;
 
-        public AccountController(IUserHelper userHelper, IConfiguration configuration)
+        public AccountController(
+            IUserHelper userHelper, 
+            IConfiguration configuration,
+            ICombosHelper combosHelper,
+            DataContext dataContext)
         {
             _userHelper = userHelper;
             _configuration = configuration;
+            _combosHelper = combosHelper;
+            _dataContext = dataContext;
         }
 
         public IActionResult Login()
@@ -106,6 +117,79 @@ namespace Zooterapp.Web.Controllers
         public IActionResult NotAuthorized()
         {
             return View();
+        }
+
+        public IActionResult Register()
+        {
+            var model = new AddUserViewModel
+            {
+                Roles = _combosHelper.GetComboRoles()
+            };
+
+            return View(model);
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Register(AddUserViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var role = "PetOwner";
+                if (model.RoleId == 1)
+                {
+                    role = "Customer";
+                }
+
+                var user = await _userHelper.AddUser(model, role);
+                if (user == null)
+                {
+                    ModelState.AddModelError(string.Empty, "This email is already used.");
+                    return View(model);
+                }
+
+                if (model.RoleId == 1)
+                {
+                    var customer = new Customer
+                    {
+                        Commitments = new List<Commitment>(),
+                        User = user
+                    };
+
+                    _dataContext.Customers.Add(customer);
+                    await _dataContext.SaveChangesAsync();
+                }
+                else
+                {
+                    var petowner = new PetOwner
+                    {
+                        Commitments = new List<Commitment>(),
+                        Pets = new List<Pet>(),
+                        User = user
+                    };
+
+                    _dataContext.PetOwners.Add(petowner);
+                    await _dataContext.SaveChangesAsync();
+                }
+
+                var loginViewModel = new LoginViewModel
+                {
+                    Password = model.Password,
+                    RememberMe = false,
+                    Username = model.Username
+                };
+
+                var result2 = await _userHelper.LoginAsync(loginViewModel);
+
+                if (result2.Succeeded)
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+            }
+
+            model.Roles = _combosHelper.GetComboRoles();
+            return View(model);
         }
 
     }

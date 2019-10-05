@@ -74,7 +74,8 @@ namespace Zooterapp.Web.Controllers
 
         public IActionResult Create()
         {
-            return View();
+            var view = new AddUserViewModel { RoleId = 2 };
+            return View(view);
         }
 
         [HttpPost]

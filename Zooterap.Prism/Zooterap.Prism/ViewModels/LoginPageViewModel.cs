@@ -66,9 +66,6 @@ namespace Zooterap.Prism.ViewModels
                 return;
             }
 
-            IsRunning = true;
-            IsEnabled = false;
-
             var url = App.Current.Resources["UrlAPI"].ToString();
             var connection = await _apiService.CheckConnectionAsync(url);
             if (!connection)
@@ -98,21 +95,32 @@ namespace Zooterap.Prism.ViewModels
             }
 
             var token = response.Result;
-            var nextResponse = await _apiService.GetPetOwnerByEmailAsync(
-                    url,
-                    "api",
-                    "/PetOwners/GetPetOwnerByEmail",
-                    "bearer",
-                    token.Token,
-                    Email
-                );
+            var response2 = await _apiService.GetPetOwnerByEmailAsync(
+                url,
+                "api",
+                "/PetOwners/GetPetOwnerByEmail",
+                "bearer",
+                token.Token,
+                Email);
 
-            var petOwner = nextResponse.Result;
+            if (!response2.IsSuccess)
+            {
+                IsRunning = false;
+                IsEnabled = true;
+                await App.Current.MainPage.DisplayAlert("Error", "Problem with user data, call 1-800-9238.", "Accept");
+                return;
+            }
 
+            var petowner = response2.Result;
             var parameters = new NavigationParameters
             {
-                { "petOwner", petOwner }
+                { "petowner", petowner }
             };
+
+            await _navigationService.NavigateAsync("PetsPage", parameters);
+
+            IsEnabled = true;
+            IsRunning = false;
 
             await _navigationService.NavigateAsync("PetsPage", parameters);
             IsEnabled = true;

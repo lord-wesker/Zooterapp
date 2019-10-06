@@ -19,6 +19,8 @@ namespace Zooterapp.Common.Models
         public string Email { get; set; }
 
         public ICollection<PetResponse> Pets { get; set; }
+
+        public string FullName => $"{FirstName} {LastName}";
     }
 
 }

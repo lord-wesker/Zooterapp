@@ -6,41 +6,89 @@
              prism:ViewModelLocator.AutowireViewModel="True"
              x:Class="Zooterap.Prism.Views.PetPage"
              Title="{Binding Title}">
-    <StackLayout>
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
+    <ScrollView>
+        <StackLayout>
             <ffimageloading:CachedImage Source="{Binding Pet.FirstImage}" Aspect="AspectFill" VerticalOptions="Center" HeightRequest="300" HorizontalOptions="FillAndExpand" WidthRequest="300"/>
-            <Frame Grid.Row="1" HasShadow="True" CornerRadius="10" Margin="10, -40, 10, 0">
-                <Grid HorizontalOptions="FillAndExpand" VerticalOptions="CenterAndExpand">
+
+            <Label
+            Text="General Information"
+            Margin="10, 0, 10, 10"
+            FontSize="Subtitle"
+            FontAttributes="Bold" />
+            <Frame Margin="10, 0, 10, 10" HasShadow="True" CornerRadius="10">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
-                    <StackLayout Orientation="Vertical" Spacing="5" HorizontalOptions="CenterAndExpand">
-                        <Label Text="{Binding Pet.Name}" FontAttributes="Bold" HorizontalOptions="Center"/>
-                        <Label Text="Name" HorizontalOptions="Center" FontSize="11"/>
-                    </StackLayout>
-                    <StackLayout Grid.Column="1" Orientation="Vertical" Spacing="5" HorizontalOptions="CenterAndExpand">
-                        <Label Text="{Binding Pet.Race}" FontAttributes="Bold" HorizontalOptions="Center" FontSize="14"/>
-                        <Label Text="Race" HorizontalOptions="Center" FontSize="11"/>
-                    </StackLayout>
-                    <StackLayout Grid.Column="2" Orientation="Vertical" Spacing="5" HorizontalOptions="CenterAndExpand">
-                        <Label Text="{Binding Pet.Age}" FontAttributes="Bold" HorizontalOptions="Center" FontSize="14"/>
-                        <Label Text="Age" HorizontalOptions="Center" FontSize="11"/>
-                    </StackLayout>
-                    <StackLayout Grid.Column="3" Orientation="Vertical" Spacing="5" HorizontalOptions="CenterAndExpand">
-                        <Label Text="{Binding Pet.PetType}" FontAttributes="Bold" HorizontalOptions="Center" FontSize="14"/>
-                        <Label Text="Type" HorizontalOptions="Center" FontSize="11"/>
-                    </StackLayout>
+
+                    <Label
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    FontAttributes="Bold"
+                    Text="Is Available" />
+                    <CheckBox
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    HorizontalOptions="End"
+                    IsEnabled="False"
+                    IsChecked="{Binding Pet.IsAvailable}" />
+
+                    <Label
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    FontAttributes="Bold"
+                    Text="Name" />
+                    <Label
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    HorizontalOptions="End"
+                    Text="{Binding Pet.Name}" />
+
+                    <Label
+                    Grid.Row="2"
+                    Grid.Column="0"
+                    FontAttributes="Bold"
+                    Text="Race" />
+                    <Label
+                    Grid.Row="2"
+                    Grid.Column="1"
+                    Text="{Binding Pet.Race}"
+                    HorizontalOptions="End"
+                    FontSize="14"/>
+
+                    <Label
+                    Grid.Row="3"
+                    Grid.Column="0"
+                    FontAttributes="Bold"
+                    Text="Age (Years)" />
+                    <Label
+                    Grid.Row="3"
+                    Grid.Column="1"
+                    Text="{Binding Pet.Age}"
+                    HorizontalOptions="End"
+                    FontSize="14"/>
+
+                    <Label
+                    Grid.Row="4"
+                    Grid.Column="0"
+                    FontAttributes="Bold"
+                    Text="Pet Type" />
+                    <Label
+                    Grid.Row="4"
+                    Grid.Column="1"
+                    Text="{Binding Pet.PetType}"
+                    HorizontalOptions="End"
+                    FontSize="14"/>
                 </Grid>
             </Frame>
-        </Grid>
-    </StackLayout>
+        </StackLayout>
+    </ScrollView>
 </ContentPage>

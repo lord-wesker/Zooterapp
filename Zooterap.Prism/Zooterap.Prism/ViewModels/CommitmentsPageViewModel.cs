@@ -1,11 +1,9 @@
-﻿using Prism.Commands;
-using Prism.Mvvm;
-using Prism.Navigation;
-using System;
-using System.Collections.Generic;
+﻿using Prism.Navigation;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Zooterapp.Common.Models;
+using Newtonsoft.Json;
+using Zooterapp.Common.Helpers;
 
 namespace Zooterap.Prism.ViewModels
 {
@@ -19,6 +17,9 @@ namespace Zooterap.Prism.ViewModels
         {
             _navigationService = navigationService;
             Title = "Commitments";
+
+            Pet = JsonConvert.DeserializeObject<PetResponse>(Settings.Pet);
+            LoadCommitments();
         }
 
         public ObservableCollection<CommitmentItemViewModel> Commitments
@@ -27,15 +28,21 @@ namespace Zooterap.Prism.ViewModels
             set => SetProperty(ref _commitments, value);
         }
 
-        public override void OnNavigatedTo(INavigationParameters parameters)
-        {
-            base.OnNavigatedTo(parameters);
+        //public override void OnNavigatedTo(INavigationParameters parameters)
+        //{
+        //    base.OnNavigatedTo(parameters);
 
-            if (parameters.ContainsKey("Pet"))
-            {
-                _pet = parameters.GetValue<PetResponse>("Pet");
-                LoadCommitments();
-            }
+        //    if (parameters.ContainsKey("Pet"))
+        //    {
+        //        _pet = parameters.GetValue<PetResponse>("Pet");
+        //        LoadCommitments();
+        //    }
+        //}
+
+        public PetResponse Pet
+        {
+            get => _pet;
+            set => SetProperty(ref _pet, value);
         }
 
         private void LoadCommitments()

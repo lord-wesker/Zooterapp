@@ -1,4 +1,6 @@
-﻿using Prism.Navigation;
+﻿using Newtonsoft.Json;
+using Prism.Navigation;
+using Zooterapp.Common.Helpers;
 using Zooterapp.Common.Models;
 
 namespace Zooterap.Prism.ViewModels
@@ -20,12 +22,14 @@ namespace Zooterap.Prism.ViewModels
         public override void OnNavigatedTo(INavigationParameters parameters)
         {
             base.OnNavigatedTo(parameters);
+            Pet = JsonConvert.DeserializeObject<PetResponse>(Settings.Pet);
 
-            if(parameters.ContainsKey("Pet"))
-            {
-                Pet = parameters.GetValue<PetResponse>("Pet");
-                Title = Pet.Name;
-            }
+
+            //if (parameters.ContainsKey("Pet"))
+            //{
+            //    Pet = parameters.GetValue<PetResponse>("Pet");
+            //    Title = Pet.Name;
+            //}
         }
     }
 }

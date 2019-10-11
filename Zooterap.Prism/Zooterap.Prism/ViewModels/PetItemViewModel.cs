@@ -1,6 +1,8 @@
 ﻿using System;
+using Newtonsoft.Json;
 using Prism.Commands;
 using Prism.Navigation;
+using Zooterapp.Common.Helpers;
 using Zooterapp.Common.Models;
 
 namespace Zooterap.Prism.ViewModels
@@ -21,12 +23,14 @@ namespace Zooterap.Prism.ViewModels
 
         private async void SelectPet()
         {
-            var parameters = new NavigationParameters
-            {
-                { "Pet", this }
-            };
+            //var parameters = new NavigationParameters
+            //{
+            //    { "Pet", this }
+            //};
 
-            await _navigationService.NavigateAsync("CommitmentsPage", parameters);
+            Settings.Pet = JsonConvert.SerializeObject(this);
+
+            await _navigationService.NavigateAsync("PetTabbedPage");
         }
     }
 }

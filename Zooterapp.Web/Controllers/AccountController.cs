@@ -21,17 +21,20 @@ namespace Zooterapp.Web.Controllers
         private readonly IConfiguration _configuration;
         private readonly ICombosHelper _combosHelper;
         private readonly DataContext _dataContext;
+        private readonly IMailHelper _mailHelper;
 
         public AccountController(
             IUserHelper userHelper, 
             IConfiguration configuration,
             ICombosHelper combosHelper,
-            DataContext dataContext)
+            DataContext dataContext,
+            IMailHelper mailHelper)
         {
             _userHelper = userHelper;
             _configuration = configuration;
             _combosHelper = combosHelper;
             _dataContext = dataContext;
+            _mailHelper = mailHelper;
         }
 
         public IActionResult Login()
@@ -173,19 +176,18 @@ namespace Zooterapp.Web.Controllers
                     await _dataContext.SaveChangesAsync();
                 }
 
-                var loginViewModel = new LoginViewModel
+                var myToken = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
+                var tokenLink = Url.Action("ConfirmEmail", "Account", new
                 {
-                    Password = model.Password,
-                    RememberMe = false,
-                    Username = model.Username
-                };
+                    userid = user.Id,
+                    token = myToken
+                }, protocol: HttpContext.Request.Scheme);
 
-                var result2 = await _userHelper.LoginAsync(loginViewModel);
-
-                if (result2.Succeeded)
-                {
-                    return RedirectToAction("Index", "Home");
-                }
+                _mailHelper.SendMail(model.Username, "ZooterApp - Email confirmation", $"<h1>ZooterApp - Email Confirmation</h1>" +
+                    $"To allow the user, " +
+                    $"plase click in this link:</br></br><a href = \"{tokenLink}\">Confirm Email</a>");
+                ViewBag.Message = "The instructions to allow your user has been sent to email.";
+                return View(model);
             }
 
             model.Roles = _combosHelper.GetComboRoles();
@@ -263,6 +265,28 @@ namespace Zooterapp.Web.Controllers
             }
 
             return View(model);
+        }
+
+        public async Task<IActionResult> ConfirmEmail(string userId, string token)
+        {
+            if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(token))
+            {
+                return NotFound();
+            }
+
+            var user = await _userHelper.GetUserByIdAsync(userId);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var result = await _userHelper.ConfirmEmailAsync(user, token);
+            if (!result.Succeeded)
+            {
+                return NotFound();
+            }
+
+            return View();
         }
 
     }

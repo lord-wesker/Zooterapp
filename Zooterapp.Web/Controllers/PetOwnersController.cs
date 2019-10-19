@@ -22,13 +22,15 @@ namespace Zooterapp.Web.Controllers
         private readonly IConfiguration _configuration;
         private readonly ICombosHelper _combosHelper;
         private readonly IConverterHelper _converterHelper;
+        private readonly IMailHelper _mailHelper;
 
         public PetOwnersController(DataContext context,
             IUserHelper userHelper,
             IImageHelper imageHelper,
             IConfiguration configuration,
             ICombosHelper combosHelper,
-            IConverterHelper converterHelper)
+            IConverterHelper converterHelper,
+            IMailHelper mailHelper)
         {
             _context = context;
             _userHelper = userHelper;
@@ -36,6 +38,7 @@ namespace Zooterapp.Web.Controllers
             _configuration = configuration;
             _combosHelper = combosHelper;
             _converterHelper = converterHelper;
+            _mailHelper = mailHelper;
         }
 
         public IActionResult Index()
@@ -101,6 +104,18 @@ namespace Zooterapp.Web.Controllers
 
                 _context.PetOwners.Add(petOwner);
                 await _context.SaveChangesAsync();
+
+                var myToken = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
+                var tokenLink = Url.Action("ConfirmEmail", "Account", new
+                {
+                    userid = user.Id,
+                    token = myToken
+                }, protocol: HttpContext.Request.Scheme);
+
+                _mailHelper.SendMail(model.Username, "Email confirmation", $"<h1>Email Confirmation</h1>" +
+                    $"To allow the user, " +
+                    $"plase click in this link:</br></br><a href = \"{tokenLink}\">Confirm Email</a>");
+
                 return RedirectToAction(nameof(Index));
             }
             return View(model);

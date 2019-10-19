@@ -4,7 +4,8 @@
              xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
              prism:ViewModelLocator.AutowireViewModel="True"
              x:Class="Zooterap.Prism.Views.LoginPage"
-            Title="{Binding Title}">
+             NavigationPage.HasNavigationBar="false"
+             Title="{Binding Title}">
 
             <StackLayout
                 AbsoluteLayout.LayoutBounds="0,0,1,1"

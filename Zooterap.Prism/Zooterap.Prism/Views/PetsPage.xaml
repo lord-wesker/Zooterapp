@@ -17,7 +17,7 @@
                 <DataTemplate>
                     <ViewCell>
                         <Grid>
-                            <Frame HasShadow="True" CornerRadius="3" Padding="0" Margin="10, 5, 10, 5">
+                            <Frame HasShadow="True" CornerRadius="3" Padding="0" Margin="10, 5, 10, 5" IsClippedToBounds="True">
                                 <Frame.GestureRecognizers>
                                     <TapGestureRecognizer Command="{Binding SelectPetCommand}" />
                                 </Frame.GestureRecognizers>

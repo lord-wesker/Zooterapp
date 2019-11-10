@@ -66,6 +66,9 @@ namespace Zooterap.Prism.ViewModels
                 return;
             }
 
+            IsEnabled = false;
+            IsRunning = true;
+
             var url = App.Current.Resources["UrlAPI"].ToString();
             var connection = await _apiService.CheckConnectionAsync(url);
             if (!connection)
@@ -114,15 +117,11 @@ namespace Zooterap.Prism.ViewModels
             var petowner = response2.Result;
             var parameters = new NavigationParameters
             {
-                { "petowner", petowner }
+                { "petOwner", petowner }
             };
 
             await _navigationService.NavigateAsync("PetsPage", parameters);
 
-            IsEnabled = true;
-            IsRunning = false;
-
-            await _navigationService.NavigateAsync("PetsPage", parameters);
             IsEnabled = true;
             IsRunning = false;
         }

@@ -6,6 +6,8 @@ namespace Zooterapp.Common.Models
     {
         public int Id { get; set; }
 
+        public int RoleId { get; set; }
+
         public string FirstName { get; set; }
 
         public string LastName { get; set; }
@@ -19,6 +21,8 @@ namespace Zooterapp.Common.Models
         public string Email { get; set; }
 
         public ICollection<PetResponse> Pets { get; set; }
+
+        public ICollection<CommitmentResponse> Commitments { get; set; }
 
         public string FullName => $"{FirstName} {LastName}";
     }

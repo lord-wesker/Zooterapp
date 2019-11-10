@@ -10,11 +10,6 @@
         <StackLayout>
             <ffimageloading:CachedImage Source="{Binding Pet.FirstImage}" Aspect="AspectFill" VerticalOptions="Center" HeightRequest="300" HorizontalOptions="FillAndExpand" WidthRequest="300"/>
 
-            <Label
-            Text="General Information"
-            Margin="10, 0, 10, 10"
-            FontSize="Subtitle"
-            FontAttributes="Bold" />
             <Frame Margin="10, 0, 10, 10" HasShadow="True" CornerRadius="10">
                 <Grid>
                     <Grid.RowDefinitions>

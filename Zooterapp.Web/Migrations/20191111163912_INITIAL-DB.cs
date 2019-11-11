@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Zooterapp.Web.Migrations
 {
-    public partial class INITIAL_DB : Migration
+    public partial class INITIALDB : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

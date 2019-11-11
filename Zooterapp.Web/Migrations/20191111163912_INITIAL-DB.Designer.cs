@@ -10,8 +10,8 @@ using Zooterapp.Web.Data;
 namespace Zooterapp.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20190907204413_INITIAL_DB")]
-    partial class INITIAL_DB
+    [Migration("20191111163912_INITIAL-DB")]
+    partial class INITIALDB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

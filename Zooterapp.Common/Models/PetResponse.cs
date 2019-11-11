@@ -24,7 +24,7 @@ namespace Zooterapp.Common.Models
         public ICollection<PetAchievementResponse> PetAchievements { get; set; }
 
         public string FirstImage => PetImages == null || PetImages.Count <= 0
-                    ? "https://zooterappweb.azurewebsites.net/images/pets/noimage.png"
+                    ? "https://zooterappitm.azurewebsites.net/images/pets/noimage.png"
                     : PetImages.FirstOrDefault().ImageUrl;
     }
 }

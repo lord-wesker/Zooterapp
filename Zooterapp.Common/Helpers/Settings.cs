@@ -6,6 +6,9 @@ namespace Zooterapp.Common.Helpers
     public static class Settings
     {
         private const string _pet = "Pet";
+        private const string _token = "token";
+        private const string _owner = "owner";
+
         private static readonly string _settingsDefault = string.Empty;
 
         private static ISettings AppSettings => CrossSettings.Current;
@@ -15,6 +18,19 @@ namespace Zooterapp.Common.Helpers
             get => AppSettings.GetValueOrDefault(_pet, _settingsDefault);
             set => AppSettings.AddOrUpdateValue(_pet, value);
         }
+
+        public static string Token
+        {
+            get => AppSettings.GetValueOrDefault(_token, _settingsDefault);
+            set => AppSettings.AddOrUpdateValue(_token, value);
+        }
+
+        public static string Owner
+        {
+            get => AppSettings.GetValueOrDefault(_owner, _settingsDefault);
+            set => AppSettings.AddOrUpdateValue(_owner, value);
+        }
+
     }
 
 }

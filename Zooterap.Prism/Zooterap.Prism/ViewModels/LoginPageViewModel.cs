@@ -1,5 +1,7 @@
-﻿using Prism.Commands;
+﻿using Newtonsoft.Json;
+using Prism.Commands;
 using Prism.Navigation;
+using Zooterapp.Common.Helpers;
 using Zooterapp.Common.Models;
 using Zooterapp.Common.Services;
 
@@ -114,16 +116,25 @@ namespace Zooterap.Prism.ViewModels
                 return;
             }
 
+            //var petowner = response2.Result;
+            //var parameters = new NavigationParameters
+            //{
+            //    { "petOwner", petowner }
+            //};
+
+            //await _navigationService.NavigateAsync("PetsPage", parameters);
+
+            //IsEnabled = true;
+            //IsRunning = false;
+
             var petowner = response2.Result;
-            var parameters = new NavigationParameters
-            {
-                { "petOwner", petowner }
-            };
-
-            await _navigationService.NavigateAsync("PetsPage", parameters);
-
-            IsEnabled = true;
+            Settings.Owner = JsonConvert.SerializeObject(petowner);
+            Settings.Token = JsonConvert.SerializeObject(token);
+            //await _navigationService.NavigateAsync("PetsPage");
+            await _navigationService.NavigateAsync("/ZooterappMasterDetailPage/NavigationPage/PetsPage");
             IsRunning = false;
+            IsEnabled = true;
+
         }
 
     }

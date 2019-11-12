@@ -8,7 +8,7 @@
     <StackLayout>
         <maps:Map
             HeightRequest="400"
-        	x:Name="EncountryMap"
+        	x:Name="ZooterappMap"
         	IsShowingUser="False"
         	MapType="Street"/>
     </StackLayout>
